@@ -1,9 +1,9 @@
 #include <iostream>
 #include <vector>
-#include <algorithm> // Pour std::shuffle :)
-#include <random>
-//#include "Board.h" // à définir on preshot
-//#include "Player.h" // à définir on preshot
+#include <algorithm> // Pour std::shuffle
+#include <random>    // Pour générer des nombres aléatoires
+//#include "Board.h"
+//#include "Player.h"
 
 namespace Game {
 
@@ -11,105 +11,105 @@ namespace Game {
     private:
         int _turn_number = 0;           // Numéro du tour actuel
         int _current_turn = 0;          // Index du joueur en cours
-        int nb_joueur = 0;              // Le nombre de joueurs
-        std::string surname;            // Le nom des joueurs
-        Board _board;                   // Instance du plateau de jeu
+        Board _board;                   // Instance du plateau
         std::vector<Player> _players;   // Liste des joueurs
 
     public:
-        Game(std::vector<Player> players) : _players(players) {
-           // Le plateau a déjà été défini dans les private avec la disposition des ressources...etc...
-           // Donc on commence par déterminer combien de joueurs vont jouer ?
-           do
-           {
-            std::cout << "Rentrer le nombre de joueur souhaité (Entre 1 et 4)\n";
-            std::cin >> nb_joueur;
-           } while (1>nb_joueur && nb_joueur>4);
-            // Ensuite il faut qu'on demande à tous les utilisateurs leurs noms
-            for (int i = 0; i < nb_joueur; i++)
-            {
-                std::cout << "Joueur " << i << " - Veuillez rentrer votre surnom : ";
-                std::cin >> surname;
-                _players.push_back()
+        // Constructeur
+        Game(std::vector<Player> players) : _players(players) {}
+
+        // Méthode pour initialiser le jeu
+        void initialize_game() {
+            std::cout << "Bienvenue dans le jeu de stratégie !\n";
+
+            // Étape 1 : Choisir le nombre de joueurs (entre 2 et 4)
+            int num_players = 0;
+            while (num_players < 2 || num_players > 4) {
+                std::cout << "Entrez le nombre de joueurs (2-4) : ";
+                std::cin >> num_players;
+                if (num_players < 2 || num_players > 4) {
+                    std::cout << "Nombre de joueurs invalide. Réessayez.\n";
+                }
             }
-            
 
+            // Création des joueurs
+            for (int i = 0; i < num_players; ++i) {
+                std::string name;
+                std::cout << "Entrez le nom du joueur " << i + 1 << ": ";
+                std::cin >> name;
+                _players.emplace_back(Player(name));
+            }
 
-            std::cout << "Détermination de l'ordre des joueurs...\n";
+            // Étape 2 : Générer le plateau avec les ressources et les chiffres aléatoires
+            std::cout << "Génération du plateau...\n";
+            _board.initialize_board();
+
+            // Étape 3 : Déterminer l'ordre de jeu des joueurs aléatoirement
             determine_turn_order();
 
-            // Étape 3 : Placement des villages initiaux
+            // Étape 4 : Placement des villages par les joueurs
             std::cout << "Placement des villages initiaux...\n";
             place_initial_villages();
 
+            // Étape 5 : Distribution des ressources adjacentes au premier village
+            std::cout << "Distribution des ressources initiales...\n";
+            distribute_initial_resources();
+
+            // Étape 6 : Prêt à jouer
             std::cout << "Le jeu est prêt à commencer !\n";
         }
 
-        // Méthode pour déterminer l'ordre de jeu aléatoirement
+        // Détermine l'ordre de jeu aléatoirement
         void determine_turn_order() {
-            std::random_device rd; // Source d'entropie
-            std::mt19937 g(rd()); // Générateur pseudo-aléatoire
-            std::shuffle(_players.begin(), _players.end(), g);
+            std::random_device rd; // Générateur d'entropie
+            std::mt19937 gen(rd());
+            std::vector<int> rolls;
 
-            std::cout << "Ordre des joueurs :\n";
-            for (size_t i = 0; i < _players.size(); i++) {
+            for (auto& player : _players) {
+                int roll1 = std::uniform_int_distribution<>(1, 6)(gen);
+                int roll2 = std::uniform_int_distribution<>(1, 6)(gen);
+                int total = roll1 + roll2;
+                rolls.push_back(total);
+                std::cout << player.get_name() << " a lancé " << roll1 << " + " << roll2 << " = " << total << "\n";
+            }
+
+            // Trier les joueurs par leur score au lancer de dés
+            std::sort(_players.begin(), _players.end(), [&](Player& a, Player& b) {
+                return a.get_dice_roll() > b.get_dice_roll();
+            });
+
+            std::cout << "Ordre de jeu déterminé :\n";
+            for (size_t i = 0; i < _players.size(); ++i) {
                 std::cout << "Joueur " << i + 1 << ": " << _players[i].get_name() << "\n";
             }
         }
 
-        // Méthode pour placer les villages initiaux
+        // Placement des villages initiaux
         void place_initial_villages() {
             for (int round = 0; round < 2; ++round) { // Chaque joueur place 2 villages
-                for (auto &player : _players) {
-                    std::cout << player.get_name() << ", placez votre village :\n";
-                    _board.place_village(player);
-                    // Distribution des ressources adjacentes
-                    std::cout << "Distribution des ressources adjacentes...\n";
-                    _board.distribute_initial_resources(player);
+                for (auto& player : _players) {
+                    _board.display(); // Afficher l'état actuel du plateau
+                    std::cout << player.get_name() << ", entrez les coordonnées pour placer votre village (x y) : ";
+                    int x, y;
+                    std::cin >> x >> y;
+
+                    while (!_board.place_village(player, x, y)) {
+                        std::cout << "Position invalide. Réessayez : ";
+                        std::cin >> x >> y;
+                    }
                 }
             }
         }
 
-        // Méthode pour jouer un tour
-        void play_turn() {
-            Player& current_player = _players[_current_turn];
-            std::cout << "C'est au tour de " << current_player.get_name() << " !\n";
-
-            // Étape 1 : Utilisation optionnelle d'une carte bonus
-            current_player.use_bonus_card();
-
-            // Étape 2 : Lancer les dés
-            int dice_roll = roll_dice();
-            std::cout << "Résultat du lancer de dés : " << dice_roll << "\n";
-
-            // Étape 3 : Distribution des ressources
-            _board.distribute_resources(dice_roll);
-
-            // Étape 4 : Actions du joueur (échanges, construction, etc.)
-            current_player.perform_actions(_board);
-
-            // Étape 5 : Passer au joueur suivant
-            _current_turn = (_current_turn + 1) % _players.size();
-            _turn_number++;
-        }
-
-        // Méthode pour vérifier si un joueur a atteint la condition de victoire
-        bool check_end_condition() {
-            for (const auto& player : _players) {
-                if (player.get_points() >= 20) {
-                    std::cout << player.get_name() << " a gagné la partie avec " << player.get_points() << " points !\n";
-                    return true;
+        // Distribution des ressources initiales
+        void distribute_initial_resources() {
+            for (auto& player : _players) {
+                std::vector<Case> adjacent_cases = _board.get_adjacent_cases(player.get_first_village_position());
+                for (const auto& case : adjacent_cases) {
+                    player.add_resource(case.get_resource_type(), 1); // 1 unité par case adjacente
                 }
+                std::cout << player.get_name() << " a reçu ses ressources initiales.\n";
             }
-            return false;
-        }
-
-        // Méthode pour lancer les dés
-        int roll_dice() {
-            std::random_device rd;
-            std::mt19937 gen(rd());
-            std::uniform_int_distribution<> distrib(1, 6);
-            return distrib(gen) + distrib(gen); // Deux dés à 6 faces
         }
     };
 }
