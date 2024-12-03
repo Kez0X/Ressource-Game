@@ -28,17 +28,17 @@ private:
     int _id;
     Ressource _ressource;
     int _diceNumber;
-    City _city;
+    City* _city;
     State _state;
-    Cell* topcell;
-    Cell* leftcell;
-    Cell* rightcell;
-    Cell* bottomcell;
+    Cell* _topcell;
+    Cell* _leftcell;
+    Cell* _rightcell;
+    Cell* _bottomcell;
 
 public:
     // Constructeur
-    Cell(const int&, Ressource, int&);
-    Cell(const int&, Ressource, int&, City);
+    Cell(const int&, Ressource, int&, State,  Cell, Cell, Cell, Cell);
+    Cell(const int&, Ressource, int&, City, State, Cell, Cell, Cell, Cell);
 
     // Getters
     const int getCellID();
