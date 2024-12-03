@@ -1,0 +1,67 @@
+{
+    "bonus": {
+      "commun": [
+        {
+          "id": "stoleACardToAPlayer",
+          "titre": "Voler une carte à un joueur",
+          "desc": "Félicitations ! Vous avez rencontrer un brigan, il vous a proposé d'aller voler une ressource de votre choix à un des autres souverains de la terre. Choisissez une carte ressource à voler chez votre adversaire."
+        },
+        {
+          "id": "stoleACardToAllPlayers",
+          "titre": "Voler une carte à tous les joueurs",
+          "desc": "Félicitations ! Vous avez rencontrer une horde de brigans, vous avez sympatisé avec eux et ils vous ont proposé d'aller voler une ressource de votre choix à chacun des autres souverains de la terre. Choisissez une carte ressource à voler chez vos adversaires."
+        },
+        {
+          "id": "doubleRessourcesDuringOneTurn",
+          "titre": "Doubler les ressources pendant un tour",
+          "desc": "C'est votre jour de chance, vous avez rentré le dirigeant d'un village tribal qui vous as proposé les services de ses citoyens pour doubler votre productivité. Vous doublez vos ressources pendant 1 tour."
+        },
+        {
+          "id": "doubleRessourcesDuringThreeTurns",
+          "titre": "Doubler les ressources pendant trois tours",
+          "desc": "Bingo ! Vos citoyens ont beaucoup appréciés la dernière loi sur les impôts que vous avez fait passez ! Vous doublez vos ressources pendant 3 tours."
+        },
+        {
+          "id": "BlockCellDuringTwoTurn",
+          "titre": "Bloquer une cellule pendant deux tours",
+          "desc": "Votre armée est prête, vous cherchez à prendre le monopole ? C'est le bon moment ! Vous bloquez une case ressource (uniquement) pendant 2 tours."
+        },
+        {
+          "id": "BlockCellDuringFiveTurns",
+          "titre": "Bloquer une cellule pendant cinq tours",
+          "desc": "Vos richesses grandissent, et votre armée aussi. Vous prenez petit à petit le monopole du continent. Vous pouvez bloquer une case ressource pendant 5 tours."
+        },
+        {
+          "id": "WinOnePoint",
+          "titre": "Gagner un point",
+          "desc": "La victoire n'est plus très loin, continuez d'avancer et vous recevrez les faveurs des autres peuples. Vous gagnez 1 point."
+        },
+        {
+          "id": "WinThreePoints",
+          "titre": "Gagner trois points",
+          "desc": "Stratégie, monopole, guerre... Vous n'êtes plus très loin de la victoire, plus qu'à annhiler vos adversaires et vous arriverez à la victoire. Vous gagner 3 points."
+        },
+        {
+          "id": "stoleARessourceToAllPlayers",
+          "titre": "Voler une ressource à tous les joueurs",
+          "desc": "Votre richesse s'agrandit, les joueurs se soumettent petit à petit à votre grandeur. Prenez le monopole de la ressource de votre choix. Chaque joueur doit vous donner toutes les ressources qu'il possède de la ressource de votre choix."
+        },
+        {
+          "id": "DestroyASmallTown",
+          "titre": "Détruire un village",
+          "desc": "Votre puissance militaire est écrasante, il est temps de vous faire connaître. Détruisez le village de votre choix. "
+        },
+        {
+          "id": "BlockACityDuringFourTurns",
+          "titre": "Bloquer une ville pendant quatre tours",
+          "desc": "Vous avez appris à controler les citoyens, vous avez creer une révolte dans la ville de votre adversaire. Bloquez une ville de votre choix pendant 4 tours"
+        },
+        {
+          "id": "DestroyRessource",
+          "titre": "Détruire une ressource",
+          "desc": "Puissance écransante, ingéniosité, souverainté, vous avez pu prouvez que vous étiez le plus légitime au titre de grand souverain. Vos armées sont sur le qui-vive, vous avez décidez de ne plus laisser le choix. Vous détruisez la case ressource de votre choix, pour le restant de la partie. Cette case devient désert et désolation. "
+        }
+      ]
+    }
+  }
+  
