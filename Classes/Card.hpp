@@ -1,5 +1,5 @@
-#ifndef CITY_H
-#define CITY_H
+#ifndef CARD_H
+#define CARD_H
 
 #include <string>
 #include <Cell.hpp>

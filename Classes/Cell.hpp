@@ -30,6 +30,10 @@ private:
     int _diceNumber;
     City _city;
     State _state;
+    Cell* topcell;
+    Cell* leftcell;
+    Cell* rightcell;
+    Cell* bottomcell;
 
 public:
     // Constructeur

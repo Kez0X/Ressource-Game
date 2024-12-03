@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#include <Card.hpp>
+#include "Card.hpp"
 
 class Player
 {
@@ -25,12 +25,12 @@ public:
     int getScore() const;
 
     // Setters
-    void setName();
-    void setBonus();
-    void setScore();
+    void setName(std::string);
+    void setBonus(std::vector<std::string>);
+    void setScore(int);
 
     //Méthodes
-    void addCard();
+    void addCard(Card);
 };
 
 #endif
