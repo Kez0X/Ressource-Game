@@ -5,7 +5,7 @@
 
 enum CitySize {
     big_city,
-    small_town
+    small_town,
 };
 
 class City {
@@ -20,6 +20,9 @@ class City {
         // Getters
         const CitySize getCitySize();
         const Player getOwner();
+
+        // Setters
+        void setTownToCity();
 };
 
 #endif

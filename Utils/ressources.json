@@ -1,0 +1,51 @@
+{
+    "ressources": {
+      "commun": [
+        {
+          "id": "Acier",
+          "titre": "Acier",
+          "desc": "L'acier, le commencement de toute civlisation civilisée."
+        },
+        {
+            "id": "Bois",
+            "titre": "Bois",
+            "desc": "Construisez des tours de verres ou même des avions. Mais sans le bois, vous ne pourrez même pas allumer un feu."
+        },
+        {
+            "id": "Sable",
+            "titre": "Sable",
+            "desc": "Le désert, les plages chauffés par le soleil ne restent que sable. Mettez le dans un four et vous obtiendrez désert et plage de verre."
+        },
+        {
+            "id": "Blé",
+            "titre": "Blé",
+            "desc": "Le blé, la base de toutes les cultures. Sans blé pas de coquillettes."
+        },
+        {
+            "id": "Nourriture",
+            "titre": "Nourriture",
+            "desc": "Vous avez faim ? Les soldats aussi. Qui dirait non à une bonne pièce de viande après une bataille sans mercis."
+        }
+    ],
+    "rare" : [
+        {
+            "id": "Pierre",
+            "titre": "Pierre",
+            "desc": "Pierre par pierre la société se construit."
+        }
+    ],
+    "épique" : [
+        {
+            "id": "Argent",
+            "titre": "Argent",
+            "desc": "Les livres sont la lumière qui guide la civilisation. La civilisation est une lutte contre la peur. Le leitmotiv même de toute notre civilisation : l'argent."
+        },
+        {
+            "id": "Or",
+            "titre": "Or",
+            "desc": "L'or te donne la terre, la terre te donne l'or. Tu veux devenir puissant, possède la terre ou l'or, tu obtiendras l'autre."
+        }
+    ]
+    }
+  }
+  

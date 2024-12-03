@@ -16,6 +16,12 @@ enum Ressource
     Nourriture
 };
 
+enum State{
+    normal,
+    blocked,
+    destroy
+};
+
 class Cell
 {
 private:
@@ -23,6 +29,7 @@ private:
     Ressource _ressource;
     int _diceNumber;
     City _city;
+    State _state;
 
 public:
     // Constructeur
@@ -34,7 +41,13 @@ public:
     const Ressource getCellRessource();
     const int getCellDiceNumber();
     const City getCity();
+    const State getState();
 
+    //Setters
+    void setStateBlocked();
+    void setStateNormal();
+    void setStateDestroy();
+    
 };
 
 #endif

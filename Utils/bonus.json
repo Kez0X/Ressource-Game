@@ -7,24 +7,26 @@
           "desc": "Félicitations ! Vous avez rencontrer un brigan, il vous a proposé d'aller voler une ressource de votre choix à un des autres souverains de la terre. Choisissez une carte ressource à voler chez votre adversaire."
         },
         {
-          "id": "stoleACardToAllPlayers",
-          "titre": "Voler une carte à tous les joueurs",
-          "desc": "Félicitations ! Vous avez rencontrer une horde de brigans, vous avez sympatisé avec eux et ils vous ont proposé d'aller voler une ressource de votre choix à chacun des autres souverains de la terre. Choisissez une carte ressource à voler chez vos adversaires."
-        },
-        {
           "id": "doubleRessourcesDuringOneTurn",
           "titre": "Doubler les ressources pendant un tour",
-          "desc": "C'est votre jour de chance, vous avez rentré le dirigeant d'un village tribal qui vous as proposé les services de ses citoyens pour doubler votre productivité. Vous doublez vos ressources pendant 1 tour."
-        },
-        {
-          "id": "doubleRessourcesDuringThreeTurns",
-          "titre": "Doubler les ressources pendant trois tours",
-          "desc": "Bingo ! Vos citoyens ont beaucoup appréciés la dernière loi sur les impôts que vous avez fait passez ! Vous doublez vos ressources pendant 3 tours."
+          "desc": "C'est votre jour de chance, vous avez rencontré le dirigeant d'un village tribal qui vous as proposé les services de ses citoyens pour doubler votre productivité. Vous doublez vos ressources pendant 1 tour."
         },
         {
           "id": "BlockCellDuringTwoTurn",
           "titre": "Bloquer une cellule pendant deux tours",
           "desc": "Votre armée est prête, vous cherchez à prendre le monopole ? C'est le bon moment ! Vous bloquez une case ressource (uniquement) pendant 2 tours."
+        }
+      ],
+      "rare" : [
+        {
+          "id": "stoleACardToAllPlayers",
+          "titre": "Voler une carte à tous les joueurs",
+          "desc": "Félicitations ! Vous avez rencontrer une horde de brigans, vous avez sympatisé avec eux et ils vous ont proposé d'aller voler une ressource de votre choix à chacun des autres souverains de la terre. Choisissez une carte ressource à voler chez vos adversaires."
+        },
+        {
+          "id": "doubleRessourcesDuringThreeTurns",
+          "titre": "Doubler les ressources pendant trois tours",
+          "desc": "Bingo ! Vos citoyens ont beaucoup appréciés la dernière loi sur les impôts que vous avez fait passez ! Vous doublez vos ressources pendant 3 tours."
         },
         {
           "id": "BlockCellDuringFiveTurns",
@@ -34,8 +36,10 @@
         {
           "id": "WinOnePoint",
           "titre": "Gagner un point",
-          "desc": "La victoire n'est plus très loin, continuez d'avancer et vous recevrez les faveurs des autres peuples. Vous gagnez 1 point."
-        },
+          "desc": "La victoire n'est plus très loin, continuez d'avancer et vous recevrez les faveurs des autres peuples. Vous gagnez 1 point. Gardez précieusement cette carte jusqu'à la fin."
+        }
+      ],
+      "épique" :[
         {
           "id": "WinThreePoints",
           "titre": "Gagner trois points",
