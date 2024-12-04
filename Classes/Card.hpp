@@ -27,14 +27,16 @@ class Card {
 
     public:
         // Constructeurs
-        Card(std::string& const, std::string& const, std::string& const, std::string& const, std::string& const);
+        Card(std::string& const, std::string& const, std::string& const, std::string& const, TypeCard);
+        Card(std::string& const, std::string& const, std::string& const, std::string& const, TypeCard, bool);
+        Card(std::string& const, std::string& const, std::string& const, std::string& const, TypeCard, bool, status);
 
         // Getters
         const std::string getId();
         const std::string getTitre();
         const std::string getDesc();
         const std::string getRarete();
-        const std::string getType();
+        const TypeCard getType();
 
         //Setters
         void setActiveCard();

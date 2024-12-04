@@ -15,6 +15,7 @@ class City {
 
     public:
         // Constructeurs
+        City(Player);
         City(CitySize, Player);
 
         // Getters
