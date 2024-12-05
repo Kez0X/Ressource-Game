@@ -46,6 +46,11 @@ public:
     const int getCellDiceNumber();
     const City getCity();
     const State getState();
+    Cell* gettopcell();
+    Cell* getleftcell();
+    Cell* getrightcell();
+    Cell* getbottomcell();
+
 
     //Setters
     void setStateBlocked();

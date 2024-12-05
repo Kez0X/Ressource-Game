@@ -50,6 +50,22 @@ const State Cell::getState() {
     return _state;
 }
 
+Cell* Cell::gettopcell(){
+    return _topcell;
+};
+
+Cell* Cell::getleftcell(){
+    return _leftcell;
+};
+
+Cell* Cell::getrightcell(){
+    return _rightcell;
+};
+
+Cell* Cell::getbottomcell(){
+    return _bottomcell;
+};
+
 // Setters
 void Cell::setStateBlocked() {
     _state = blocked;
