@@ -56,6 +56,10 @@ public:
     void setStateBlocked();
     void setStateNormal();
     void setStateDestroy();
+    void setTopcell(Cell* topcell);
+    void setLeftcell(Cell* leftcell);
+    void setRightcell(Cell* rightcell);
+    void setBottomcell(Cell* bottomcell);
     
 };
 

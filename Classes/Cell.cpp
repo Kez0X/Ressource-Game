@@ -78,3 +78,19 @@ void Cell::setStateNormal() {
 void Cell::setStateDestroy() {
     _state = destroy;
 }
+
+ void Cell::setTopcell(Cell* topcell){
+    _topcell = topcell;
+ };
+
+void Cell::setLeftcell(Cell* leftcell){
+    _leftcell = leftcell;
+};
+
+void Cell::setRightcell(Cell* rightcell){
+    _rightcell = rightcell;
+};
+
+void Cell::setBottomcell(Cell* bottomcell){
+    _bottomcell = bottomcell;
+};
