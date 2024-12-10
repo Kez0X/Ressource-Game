@@ -15,8 +15,9 @@ private:
 
 public:
     // Constructeurs
-    Player(const std::string&, std::vector<Card>&);
-    Player(const std::string&, std::vector<Card>&, std::vector<std::string>&, int&);
+    Player(const std::string);
+    Player(const std::string, std::vector<Card>);
+    Player(const std::string, std::vector<Card>, std::vector<std::string>, int);
 
     // Getters
     std::string getName() const;

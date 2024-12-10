@@ -7,6 +7,12 @@
 #include <ctime>
 #include <vector>
 
+int randomInt()
+{
+    std::srand(std::time(0));
+    return std::rand();
+}
+
 Board::Board()
 {
     _map_cases = {{"commun", {{Acier, 6}, {Bois, 10}, {Sable, 9}, {Ble, 9}, {Nourriture, 8}}}, {"rare", {{Pierre, 4}}}, {"épique", {{Argent, 2}, {Or, 1}}}};
@@ -174,12 +180,6 @@ Board::Board()
         }
     }
 };
-
-int randomInt()
-{
-    std::srand(std::time(0));
-    return std::rand();
-}
 
 void Board::drawRessource(Ressource *_ressourceRef, std::string *_rarityRef)
 {

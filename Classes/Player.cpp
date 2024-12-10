@@ -3,14 +3,21 @@
 #include <cassert>
 
 // Constructeurs
-Player::Player(const std::string& name, std::vector<Card>& deck){
+Player::Player(const std::string name){
+    _name = name;
+    _deck = {};
+    _bonus = {};
+    _score = 0;
+};
+
+Player::Player(const std::string name, std::vector<Card> deck){
     _name = name;
     _deck = deck;
     _bonus = {};
     _score = 0;
 };
 
-Player::Player(const std::string& name, std::vector<Card>& deck, std::vector<std::string>& bonus, int& score){
+Player::Player(const std::string name, std::vector<Card> deck, std::vector<std::string> bonus, int score){
     _name = name;
     _deck = deck;
     _bonus = bonus;

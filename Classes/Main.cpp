@@ -1,10 +1,17 @@
 #include <iostream>
 #include <vector>
-#include <algorithm> // Pour std::shuffle
 #include <random>    // Pour générer des nombres aléatoires
 #include <string>
+#include <ctime>
+
 #include <Board.hpp>
 #include <Player.hpp>
+
+int randomInt()
+{
+    std::srand(std::time(0));
+    return std::rand();
+}
 
 void main()
 {
@@ -26,11 +33,28 @@ void main()
     for (int i = 0; i < player_count; i++)
     {
         std::cout << "Entrez le prénom du joueur ";
-        players_list[i] = new Player();
+        std::string name = "Linus";
+        std::cin >> name;
+        players_list[i] = new Player(name);
     }
 
+    // Définition de l'ordre de jeu
+    for (int i = 0; i < player_count; i++)
+    {
+        int random_number = randomInt() % player_count;
+        Player* swap = players_list[i];
+        players_list[i] = players_list[random_number];
+        players_list[random_number] = swap;
+    }
+    std::cout << std::endl << "Voici l'ordre de jeu" << std::endl;
+    for (int i = 0; i < player_count; i++)
+    {
+        std::cout << i << ". " << players_list[i]->getName() << std::endl;
+    }
+    
+    
     // Suppression des variables en mémoire
-    delete _board;
+    delete[] _board;
     for (int i = 0; i < player_count; i++)
     {
         delete players_list[i];
