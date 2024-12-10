@@ -2,22 +2,22 @@
 #include <iostream>
 #include <cassert>
 
-// Constructeurs
-Player::Player(const std::string name){
+// ucteurs
+Player::Player(std::string name){
     _name = name;
     _deck = {};
     _bonus = {};
     _score = 0;
 };
 
-Player::Player(const std::string name, std::vector<Card> deck){
+Player::Player(std::string name, std::vector<Card> deck){
     _name = name;
     _deck = deck;
     _bonus = {};
     _score = 0;
 };
 
-Player::Player(const std::string name, std::vector<Card> deck, std::vector<std::string> bonus, int score){
+Player::Player(std::string name, std::vector<Card> deck, std::vector<std::string> bonus, int score){
     _name = name;
     _deck = deck;
     _bonus = bonus;
@@ -25,16 +25,16 @@ Player::Player(const std::string name, std::vector<Card> deck, std::vector<std::
 }
 
 // Getters
-std::string Player::getName() const {
+std::string Player::getName() {
     return _name;
 };
-std::vector<Card> Player::getDeck() const {
+std::vector<Card> Player::getDeck() {
     return _deck;
 };
-std::vector<std::string> Player::getBonus() const {
+std::vector<std::string> Player::getBonus() {
     return _bonus;
 };
-int Player::getScore() const {
+int Player::getScore() {
     return _score;
 };
 

@@ -4,8 +4,8 @@
 #include <string>
 #include <ctime>
 
-#include <Board.hpp>
-#include <Player.hpp>
+#include "Board.hpp"
+#include "Player.hpp"
 
 int randomInt()
 {
@@ -13,7 +13,7 @@ int randomInt()
     return std::rand();
 }
 
-void main()
+int main()
 {
 
     // Initialisation des variables du jeu
@@ -22,7 +22,7 @@ void main()
 
     // Définition du nombre de joueur entre 2 et 4
     int player_count = 0; // Nombre de joueur
-    while (player_count < 2 && player_count > 4)
+    while (player_count < 2 || player_count > 4)
     {
         std::cout << "Entrez le nombre de joueur souhaités (2-4) : ";
         std::cin >> player_count;
@@ -54,10 +54,12 @@ void main()
     
     
     // Suppression des variables en mémoire
+    /*
     delete[] _board;
     for (int i = 0; i < player_count; i++)
     {
         delete players_list[i];
-    }
+    }*/
     
+    return 0;
 };

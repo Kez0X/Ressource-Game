@@ -2,7 +2,7 @@
 #define BOARD_H
 
 #include <iostream>
-#include <Cell.hpp>
+#include "Cell.hpp"
 #include <vector>
 #include <string>
 #include <map>

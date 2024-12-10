@@ -15,22 +15,22 @@ private:
 
 public:
     // Constructeurs
-    Player(const std::string);
-    Player(const std::string, std::vector<Card>);
-    Player(const std::string, std::vector<Card>, std::vector<std::string>, int);
+    Player(std::string);
+    Player(std::string, std::vector<Card>);
+    Player(std::string, std::vector<Card>, std::vector<std::string>, int);
 
     // Getters
-    std::string getName() const;
-    std::vector<Card> getDeck() const;
-    std::vector<std::string> getBonus() const;
-    int getScore() const;
+    std::string getName();
+    std::vector<Card> getDeck();
+    std::vector<std::string> getBonus();
+    int getScore();
 
     // Setters
     void setName(std::string);
     void setBonus(std::vector<std::string>);
     void setScore(int);
 
-    //Méthodes
+    // Méthodes
     void addCard(Card);
 };
 

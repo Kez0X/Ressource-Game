@@ -1,7 +1,7 @@
 #ifndef CITY_H
 #define CITY_H
 
-#include <Player.hpp>
+class Player;
 
 enum CitySize {
     big_city,
@@ -11,16 +11,16 @@ enum CitySize {
 class City {
     private:
         CitySize _size;
-        Player _owner;
+        Player* _owner;
 
     public:
         // Constructeurs
-        City(Player);
-        City(CitySize, Player);
+        City(Player*);
+        City(CitySize, Player*);
 
         // Getters
-        const CitySize getCitySize();
-        const Player getOwner();
+        Player* getOwner();
+        CitySize getCitySize();
 
         // Setters
         void setTownToCity();

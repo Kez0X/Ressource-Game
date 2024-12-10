@@ -7,7 +7,7 @@
 #include <ctime>
 #include <vector>
 
-int randomInt()
+int randomInt2()
 {
     std::srand(std::time(0));
     return std::rand();
@@ -31,7 +31,7 @@ Board::Board()
             drawRessource(cellRessource, cellRarity);
 
             // Choix du numéro du dés
-            int cellDiceNumber = _map_dice[*cellRarity][randomInt() % _map_dice[*cellRarity].size()];
+            int cellDiceNumber = _map_dice[*cellRarity][randomInt2() % _map_dice[*cellRarity].size()];
 
             // Génération de la cellule
             _board[index] = new Cell(index, *cellRessource, cellDiceNumber, normal);
@@ -191,7 +191,7 @@ void Board::drawRessource(Ressource *_ressourceRef, std::string *_rarityRef)
     while (*_rarityRef == "" && *_ressourceRef == undefined)
     {
         // Choix de la rareté
-        std::string selectedRarity = listRarity[randomInt() % 3];
+        std::string selectedRarity = listRarity[randomInt2() % 3];
 
         // Vérification qu'il existe encore des ressources disponibles
         if (!_map_cases[selectedRarity].empty())
@@ -208,7 +208,7 @@ void Board::drawRessource(Ressource *_ressourceRef, std::string *_rarityRef)
             }
 
             // Choix de la ressource
-            Ressource selectedRessource = availableRessources[randomInt() % availableRessources.size()];
+            Ressource selectedRessource = availableRessources[randomInt2() % availableRessources.size()];
 
             // Décrémentation de la ressource
             _map_cases[selectedRarity][selectedRessource]--;

@@ -3,7 +3,7 @@
 #include <cassert>
 
 
-Card::Card(std::string& const id, std::string& const titre, std::string& const desc, std::string& const rarete, TypeCard type){
+Card::Card(std::string id, std::string titre, std::string desc, std::string rarete, TypeCard type){
     _id = id;
     _titre = titre;
     _desc = desc;
@@ -13,7 +13,7 @@ Card::Card(std::string& const id, std::string& const titre, std::string& const d
     _status = NotUse;
 };
 
-Card::Card(std::string& const id, std::string& const titre, std::string& const desc, std::string& const rarete, TypeCard type, bool active){
+Card::Card(std::string id, std::string titre, std::string desc, std::string rarete, TypeCard type, bool active){
     _id = id;
     _titre = titre;
     _desc = desc;
@@ -23,7 +23,7 @@ Card::Card(std::string& const id, std::string& const titre, std::string& const d
     _status = NotUse;
 };
 
-Card::Card(std::string& const id, std::string& const titre, std::string& const desc, std::string& const rarete, TypeCard type, bool active, status status){
+Card::Card(std::string id, std::string titre, std::string desc, std::string rarete, TypeCard type, bool active, status status){
     _id = id;
     _titre = titre;
     _desc = desc;
@@ -34,19 +34,19 @@ Card::Card(std::string& const id, std::string& const titre, std::string& const d
 };
 
 // Getters
-const std::string Card::getId(){
+std::string Card::getId(){
     return _id;
 };
-const std::string Card::getTitre(){
+std::string Card::getTitre(){
     return _titre;
 };
-const std::string Card::getDesc(){
+std::string Card::getDesc(){
     return _desc;
 };
-const std::string Card::getRarete(){
+std::string Card::getRarete(){
     return _rarete;
 };
-const TypeCard Card::getType(){
+TypeCard Card::getType(){
     return _type;
 };
 
