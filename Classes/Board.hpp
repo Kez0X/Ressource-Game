@@ -23,6 +23,9 @@ private:
 public:
     // Constructeur
     Board();
+
+    // Méthodes
+    Cell* getCellByIndex(std::string);
     
 };
 

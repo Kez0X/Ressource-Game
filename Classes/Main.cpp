@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <random>    // Pour générer des nombres aléatoires
+#include <random> // Pour générer des nombres aléatoires
 #include <string>
 #include <ctime>
 
@@ -18,7 +18,7 @@ int main()
 
     // Initialisation des variables du jeu
     int _turn_number = 0;        // Numéro du tour
-    Board* _board = new Board(); // Plateau de jeu
+    Board *_board = new Board(); // Plateau de jeu
 
     // Définition du nombre de joueur entre 2 et 4
     int player_count = 0; // Nombre de joueur
@@ -29,7 +29,7 @@ int main()
     }
 
     // Récupération du nom des joueurs et stockage en mémoire des entités
-    Player* players_list[player_count]; 
+    Player *players_list[player_count];
     for (int i = 0; i < player_count; i++)
     {
         std::cout << "Entrez le prénom du joueur ";
@@ -42,24 +42,31 @@ int main()
     for (int i = 0; i < player_count; i++)
     {
         int random_number = randomInt() % player_count;
-        Player* swap = players_list[i];
+        Player *swap = players_list[i];
         players_list[i] = players_list[random_number];
         players_list[random_number] = swap;
     }
-    std::cout << std::endl << "Voici l'ordre de jeu" << std::endl;
+    std::cout << std::endl
+              << "Voici l'ordre de jeu" << std::endl;
     for (int i = 0; i < player_count; i++)
     {
         std::cout << i << ". " << players_list[i]->getName() << std::endl;
     }
-    
-    
+
     // Suppression des variables en mémoire
-    /*
-    delete[] _board;
+    for (char row = 'a'; row < 'h'; row++)
+    {
+        for (int column = 0; column < 7; column++)
+        {
+            std::string index = row + std::to_string(column);
+            delete _board->getCellByIndex(index);
+        }
+    }
+
     for (int i = 0; i < player_count; i++)
     {
         delete players_list[i];
-    }*/
-    
+    }
+
     return 0;
 };

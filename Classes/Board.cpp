@@ -225,3 +225,8 @@ void Board::drawRessource(Ressource *_ressourceRef, std::string *_rarityRef)
         };
     }
 }
+
+Cell* Board::getCellByIndex(std::string index)
+{
+    return _board[index];
+}
