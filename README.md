@@ -13,14 +13,14 @@ Un jeu ressemblant à Catane, vous avez la possibilité de construire des villag
 -	Argent
 -	Nourriture
   
-La disposition des ressources dépendra de leurs raretés et de leurs nombres. En effet le jeu comportera 44 cases :
+La disposition des ressources dépendra de leurs raretés et de leurs nombres. En effet le jeu comportera 48 cases :
 
--	Acier (5 cases – classe : commun)
+-	Acier (6 cases – classe : commun)
 -	Bois (10 cases – classe : commun)
--	Sable (7 cases – classe : commun)
+-	Sable (9 cases – classe : commun)
 -	Pierre (4 cases – classe : rare)
 -	Or (1 case – classe : épique)
--	Blé (7 cases – classe : commun)
+-	Blé (9 cases – classe : commun)
 -	Argent (2 cases – classe : épique)
 -	Nourriture (8 cases – classe : commun)
   
