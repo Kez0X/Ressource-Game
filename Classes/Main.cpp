@@ -10,8 +10,8 @@ void main()
 {
 
     // Initialisation des variables du jeu
-    int _turn_number = 0;       // Numéro du tour
-    Board _board = new Board(); // Plateau de jeu
+    int _turn_number = 0;        // Numéro du tour
+    Board* _board = new Board(); // Plateau de jeu
 
     // Définition du nombre de joueur entre 2 et 4
     int player_count = 0; // Nombre de joueur
@@ -25,7 +25,15 @@ void main()
     Player* players_list[player_count]; 
     for (int i = 0; i < player_count; i++)
     {
-        std::cout << "Entrez le prénom du joueur "
+        std::cout << "Entrez le prénom du joueur ";
         players_list[i] = new Player();
     }
+
+    // Suppression des variables en mémoire
+    delete _board;
+    for (int i = 0; i < player_count; i++)
+    {
+        delete players_list[i];
+    }
+    
 };

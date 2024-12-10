@@ -9,7 +9,8 @@
 class Board
 {
 private:
-    Cell _board[44];
+    std::vector<Cell*> _board;
+    std::map<std::string, std::map<Ressource, int>> map_cases
 
 public:
     // Constructeur

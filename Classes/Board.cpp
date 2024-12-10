@@ -5,10 +5,13 @@
 #include <map>
 #include <random>
 #include <ctime>
+#include <vector>
 
 Board::Board(){
     std::map<std::string, std::map<Ressource, int>> map_cases = {{"commun", {{Acier, 5},{Bois , 10}, {Sable , 7}, {Ble , 7}, {Nourriture, 8}}},{"rare" , {{Pierre , 4}}}, {"épique", {{Argent,2}, {Or , 1}}}};
     std::map<std::string, std::vector<int>> map_dice = {{"commun" , {5,6,7,8,9}}, {"rare", {3,4,10,11}}, {"épique" , {1,2,12}}};
+
+
 };
 
 
