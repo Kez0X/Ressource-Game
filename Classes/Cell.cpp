@@ -3,7 +3,20 @@
 #include <cassert>
 
 // Constructeur sans ville
-Cell::Cell(const int& id, Ressource ressource, int& diceNumber, State state, Cell topcell, Cell leftcell, Cell rightcell, Cell bottomcell){
+Cell::Cell(const std::string id, Ressource ressource, int diceNumber, State state){
+    _id = id;
+    _ressource = ressource;
+    _diceNumber = diceNumber;
+    _city = nullptr;
+    _state = state;
+    _topcell = nullptr;
+    _leftcell = nullptr;
+    _rightcell = nullptr;
+    _bottomcell = nullptr;
+};
+
+// Constructeur sans ville
+Cell::Cell(const std::string id, Ressource ressource, int diceNumber, State state, Cell topcell, Cell leftcell, Cell rightcell, Cell bottomcell){
     _id = id;
     _ressource = ressource;
     _diceNumber = diceNumber;
@@ -16,7 +29,7 @@ Cell::Cell(const int& id, Ressource ressource, int& diceNumber, State state, Cel
 };
 
 // Constructeur avec ville
-Cell::Cell(const int& id, Ressource ressource, int& diceNumber, City city, State state, Cell topcell, Cell leftcell, Cell rightcell, Cell bottomcell){
+Cell::Cell(const std::string id, Ressource ressource, int diceNumber, City city, State state, Cell topcell, Cell leftcell, Cell rightcell, Cell bottomcell){
     _id = id;
     _ressource = ressource;
     _diceNumber = diceNumber;
@@ -30,7 +43,7 @@ Cell::Cell(const int& id, Ressource ressource, int& diceNumber, City city, State
 
 
 // Getters
-const int Cell::getCellID() {
+const std::string Cell::getCellID() {
     return _id;
 }
 

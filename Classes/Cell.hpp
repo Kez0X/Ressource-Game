@@ -13,7 +13,8 @@ enum Ressource
     Or,
     Ble,
     Argent,
-    Nourriture
+    Nourriture,
+    undefined
 };
 
 enum State{
@@ -25,7 +26,7 @@ enum State{
 class Cell
 {
 private:
-    int _id;
+    std::string _id;
     Ressource _ressource;
     int _diceNumber;
     City* _city;
@@ -37,11 +38,12 @@ private:
 
 public:
     // Constructeur
-    Cell(const int&, Ressource, int&, State,  Cell, Cell, Cell, Cell);
-    Cell(const int&, Ressource, int&, City, State, Cell, Cell, Cell, Cell);
+    Cell(const std::string, Ressource, int, State);
+    Cell(const std::string, Ressource, int, State,  Cell, Cell, Cell, Cell);
+    Cell(const std::string, Ressource, int, City, State, Cell, Cell, Cell, Cell);
 
     // Getters
-    const int getCellID();
+    const std::string getCellID();
     const Ressource getCellRessource();
     const int getCellDiceNumber();
     const City getCity();

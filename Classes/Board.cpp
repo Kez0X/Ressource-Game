@@ -8,105 +8,80 @@
 #include <vector>
 
 Board::Board(){
-    std::map<std::string, std::map<Ressource, int>> map_cases = {{"commun", {{Acier, 6},{Bois , 10}, {Sable , 9}, {Ble , 9}, {Nourriture, 8}}},{"rare" , {{Pierre , 4}}}, {"épique", {{Argent,2}, {Or , 1}}}};
-    std::map<std::string, std::vector<int>> map_dice = {{"commun" , {5,6,7,8,9}}, {"rare", {3,4,10,11}}, {"épique" , {1,2,12}}};
+    _map_cases = {{"commun", {{Acier, 6},{Bois , 10}, {Sable , 9}, {Ble , 9}, {Nourriture, 8}}},{"rare" , {{Pierre , 4}}}, {"épique", {{Argent,2}, {Or , 1}}}};
+    _map_dice = {{"commun" , {5,6,7,8,9}}, {"rare", {3,4,10,11}}, {"épique" , {1,2,12}}};
+
+    int column = 0;
+    char row = 'a';
+
+    std::string index = row + std::to_string(column);
+    for (int i = 0; i < 7; i++)
+    {
+        for (int j = 0; j < 7; j++)
+        {
+            // Tirage de la ressource aléatoire
+            Ressource* cellRessource = new Ressource;
+            std::string* cellRarity = new std::string;
+            drawRessource(cellRessource, cellRarity);
+
+            // Choix du numéro du dés
+            int cellDiceNumber = _map_dice[*cellRarity][randomInt() % _map_dice[*cellRarity].size()];
+
+            // Génération de la cellule
+            _board[index] = new Cell(index, *cellRessource, cellDiceNumber, normal);
+
+            delete cellRessource;
+            delete cellRarity;
+            column++;
+        }
+        column = 0;
+        row++;
+    }
 };
 
-
-Cell boardCreation(std::map<std::string, std::map<Ressource, int>> map_cases, std::map<std::string, std::vector<int>> map_dice, Cell cell, int id){
-    Cell* topcell = cell.gettopcell();
-    Cell* rightcell = cell.getrightcell();
-    Cell* leftcell = cell.getleftcell();
-    Cell* bottomcell = cell.getbottomcell();
-    // Si tout les pointeurs sont nulls alors c'est notre 1 ère itération
-    // Ici on a les pointeurs de la cellule parente
-
-    Cell* newTopcell = nullptr;
-    Cell* newRightcell = nullptr;
-    Cell* newLeftcell = nullptr;
-    Cell* newBottomcell = nullptr;
-    // Ici on a les pointeurs de la nouvelle cellule
-    // Quand on creer un nouvelle cellule on estime qu'elle est seule
-    // On génère toutes les informations nécessaires à la création de la cellule
-    std::vector<Ressource, std::string> ressources = ressourceAlea(map_cases); // On a récupérer la ressource aléatoire et sa classe
-    Ressource ressourceSelect = ressources[0];
+int randomInt() 
+{
     std::srand(std::time(0));
-    int randomNumber = 1 + std::rand() % map_dice[ressources[1]].size();
-    int diceNumber = map_dice[ressources[1]][randomNumber-1];
-    // On creer notre cellule
-    Cell newCell = Cell(id, ressources[0], diceNumber, normal, newTopcell , newRightcell , newLeftcell , newBottomcell ); // On creer la nouvelle cellule
-    // On fait les mises à jour necessaires dans le dictionnaire
-    map_cases[ressources[1]][ressources[0]] -=1;
-    if (verfifyDicoEmpty(map_cases[ressources[1]])){
-        map_cases[ressources[1]] = {};
-    }
-
-    if (id == 44){
-        // Il faut lier les pointeurs entre eux
-        return newCell;
-    }else{
-
-        if (topcell == nullptr && leftcell == nullptr && rightcell == nullptr && bottomcell == nullptr){ // C'est le cas en haut à gauche du plateau
-            // On part du postula que la cellule parente vient de droite
-            cell.setLeftcell(&newCell);
-            newCell.setRightcell(&cell);
-            id +=1;
-            // On n'a plus qu'à définir la cellule du bas
-            newCell.setBottomcell(boardCreation(map_cases, map_dice, newCell, id));
-        } // Puis les autres cas...
+    return std::rand();
 }
 
-bool verfifyDicoEmpty(std::map<Ressource, int> map){
-    bool rep = true;
-    for (const auto& [key, value] : map) {
-            if (value != 0){
-                rep = false;
-            }
-        }
-    return rep;
-}
+void Board::drawRessource(Ressource* _ressourceRef, std::string* _rarityRef) {
+    *_rarityRef = "";
+    *_ressourceRef = undefined;
 
+    std::string listRarity[3] = {"commun", "rare", "épique"};
 
-std::vector<Ressource, std::string> ressourceAlea(std::map<std::string, std::map<Ressource, int>> map_cases){
-    std::srand(std::time(0));
-    std::vector<Ressource> listOfKeys;
-    Ressource ressourceChoice;
-    std::string classe = "";
-    int randomNumber = 1 + std::rand() % 3;
-    if (randomNumber==1 && !map_cases["commun"].empty()){
-        for (const auto& [key, value] : map_cases["commun"]) {
-            if (value!= 0){
-                listOfKeys.push_back(key);
+    while (*_rarityRef == "" && *_ressourceRef == undefined)
+    {
+        // Choix de la rareté
+        std::string selectedRarity = listRarity[randomInt() % 3];
+        
+        // Vérification qu'il existe encore des ressources disponibles
+        if (!_map_cases[selectedRarity].empty()) {
+
+            // Récupération des ressources disponibles
+            std::vector<Ressource> availableRessources = {};
+            for (const auto& [key, value] : _map_cases[selectedRarity]) {
+                if (value!= 0){
+                    availableRessources.push_back(key);
+                }
             }
-        }
-        std::srand(std::time(0));
-        int SecondRandomNumber = 1 + std::rand() % listOfKeys.size();
-        ressourceChoice = listOfKeys[SecondRandomNumber-1];
-        classe = "commun";
-        // On a la ressource aléatoirement choisi parmi celles restantes
-    }else if (randomNumber==2 && !map_cases["rare"].empty()){
-        for (const auto& [key, value] : map_cases["rare"]) {
-            if (value!= 0){
-                listOfKeys.push_back(key);
+
+            // Choix de la ressource
+            Ressource selectedRessource = availableRessources[randomInt() % availableRessources.size()];
+
+            // Décrémentation de la ressource
+            _map_cases[selectedRarity][selectedRessource]--;
+
+            // Suppression si la ressource est égale à 0
+            if (_map_cases[selectedRarity][selectedRessource] <= 0)
+            {
+                _map_cases[selectedRarity].erase(selectedRessource);
             }
-        }
-        std::srand(std::time(0));
-        int SecondRandomNumber = 1 + std::rand() % listOfKeys.size();
-        ressourceChoice = listOfKeys[SecondRandomNumber-1];
-        classe = "rare";
-        // On a la ressource aléatoirement choisi parmi celles restantes
-    }else if (randomNumber==3 && !map_cases["épique"].empty()){
-        for (const auto& [key, value] : map_cases["épique"]) {
-            if (value!= 0){
-                listOfKeys.push_back(key);
-            }
-        }
-        std::srand(std::time(0));
-        int SecondRandomNumber = 1 + std::rand() % listOfKeys.size();
-        ressourceChoice = listOfKeys[SecondRandomNumber-1];
-        classe = "épique";
-        // On a la ressource aléatoirement choisi parmi celles restantes
+
+            // Attribution aux pointeurs
+            *_rarityRef = selectedRarity;
+            *_ressourceRef = selectedRessource;
+        };
     }
-    std::vector<Ressource, std::string> listElt = {ressourceChoice, classe};
-    return listElt;
 }
