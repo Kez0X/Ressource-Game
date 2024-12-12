@@ -17,12 +17,12 @@ City::City(CitySize size, Player *owner)
 };
 
 // Getters
-CitySize City::getCitySize()
+CitySize City::getCitySize() const
 {
     return _size;
 };
 
-Player *City::getOwner()
+Player *City::getOwner() const
 {
     return _owner;
 };

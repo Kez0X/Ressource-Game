@@ -53,6 +53,38 @@ int main()
         std::cout << i << ". " << players_list[i]->getName() << std::endl;
     }
 
+    // Placement des villages de chacuns des joueurs dans l'ordre de jeu
+    // 2 villages / joueur
+    int i = 0;
+    while(i<8){
+        // On affiche le plateau
+
+        i++;
+    }
+
+    // On garde en mémoire le permier village placer
+
+
+
+    // distribution des ressources en fonction du premier village placé
+
+
+    // commencement du jeu
+
+        // Déroulement d'un tour
+
+        // Possibilité durant tout le tour de proposer des échanges avec d'autres joueurs / le commerce mondial
+
+        // Possibilité de jouer des cartes BONUS
+
+        // Lancement des dés et distributions des ressources en fonction du placement des villages / villes
+
+        // Possibilité de construire un village / améliorer un village en ville / construire une ou plusieurs cartes bonus
+
+        // Fin du tour
+
+    // Le jeu d'arrête quand un joueur arrive à 20 points
+
     // Suppression des variables en mémoire
     for (char row = 'a'; row < 'h'; row++)
     {

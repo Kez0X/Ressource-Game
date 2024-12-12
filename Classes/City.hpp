@@ -19,8 +19,8 @@ class City {
         City(CitySize, Player*);
 
         // Getters
-        Player* getOwner();
-        CitySize getCitySize();
+        Player* getOwner() const;
+        CitySize getCitySize() const;
 
         // Setters
         void setTownToCity();

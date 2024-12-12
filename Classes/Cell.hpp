@@ -46,7 +46,7 @@ public:
     const std::string getCellID();
     const Ressource getCellRessource();
     const int getCellDiceNumber();
-    const City getCity();
+    const City* getCity();
     const State getState();
     Cell* gettopcell();
     Cell* getleftcell();
@@ -62,6 +62,8 @@ public:
     void setLeftcell(Cell* leftcell);
     void setRightcell(Cell* rightcell);
     void setBottomcell(Cell* bottomcell);
+
+    void addCity(City* city);
     
 };
 

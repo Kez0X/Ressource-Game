@@ -55,8 +55,8 @@ const int Cell::getCellDiceNumber() {
     return _diceNumber;
 }
 
-const City Cell::getCity() {
-    return *_city;
+const City* Cell::getCity() {
+    return _city;
 }
 
 const State Cell::getState() {
@@ -106,4 +106,8 @@ void Cell::setRightcell(Cell* rightcell){
 
 void Cell::setBottomcell(Cell* bottomcell){
     _bottomcell = bottomcell;
+};
+
+void Cell::addCity(City* city){
+    _city = city;
 };

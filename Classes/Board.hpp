@@ -26,6 +26,10 @@ public:
 
     // Méthodes
     Cell* getCellByIndex(std::string);
+
+    void printBoard();
+
+    std::string ressourceToString(Ressource);
     
 };
 

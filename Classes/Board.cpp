@@ -230,3 +230,64 @@ Cell* Board::getCellByIndex(std::string index)
 {
     return _board[index];
 }
+
+void Board::printBoard()
+{
+    for (char row = 'a'; row < 'h'; row++)
+    {
+        for (int column = 0; column < 7; column++)
+        {
+            std::string index = row + std::to_string(column);
+            Cell *currentCell = _board[index];
+
+            // Récupérer les informations de la cellule
+            Ressource ressource = currentCell->getCellRessource();
+            int diceNumber = currentCell->getCellDiceNumber();
+            std::string structureInfo;
+
+            // Vérifier si une ville ou un village est présent
+            const City *city = currentCell->getCity();
+            if (city != nullptr)
+            {
+                Player *owner = city->getOwner();
+                structureInfo = (city->getCitySize() == small_town ? "Village" : "Ville") +
+                                " (Propriétaire: " + (owner != nullptr ? owner*.getName() : "Inconnu") + ")";
+            }
+            else
+            {
+                structureInfo = "None";
+            }
+
+            // Afficher les informations de la cellule
+            std::cout << "[" << index << "] Ressource: " << ressourceToString(ressource)
+                      << ", Dé: " << diceNumber
+                      << ", Structure: " << structureInfo
+                      << "\n";
+        }
+    }
+}
+
+std::string Board::ressourceToString(Ressource ressource)
+{
+    switch (ressource)
+    {
+    case Acier:
+        return "Acier";
+    case Bois:
+        return "Bois";
+    case Sable:
+        return "Sable";
+    case Ble:
+        return "Blé";
+    case Nourriture:
+        return "Nourriture";
+    case Pierre:
+        return "Pierre";
+    case Argent:
+        return "Argent";
+    case Or:
+        return "Or";
+    default:
+        return "Indéfini";
+    }
+}
