@@ -1,5 +1,6 @@
 #include "Board.hpp"
 #include "Cell.hpp"
+#include "Player.hpp"
 #include <iostream>
 #include <cassert>
 #include <map>
@@ -249,13 +250,13 @@ void Board::printBoard()
             const City *city = currentCell->getCity();
             if (city != nullptr)
             {
-                Player *owner = city->getOwner();
-                structureInfo = (city->getCitySize() == small_town ? "Village" : "Ville") +
-                                " (Propriétaire: " + (owner != nullptr ? owner*.getName() : "Inconnu") + ")";
+                Player * owner = city->getOwner();
+                structureInfo = (city->getCitySize() == small_town ? "Village 🏘️" : "Ville 🌇");
+                structureInfo += "( Propriétaire: " + owner->getName() + " )";
             }
             else
             {
-                structureInfo = "None";
+                structureInfo = " ";
             }
 
             // Afficher les informations de la cellule
@@ -267,26 +268,27 @@ void Board::printBoard()
     }
 }
 
+
 std::string Board::ressourceToString(Ressource ressource)
 {
     switch (ressource)
     {
     case Acier:
-        return "Acier";
+        return "Acier 🗼";
     case Bois:
-        return "Bois";
+        return "Bois 🪵";
     case Sable:
-        return "Sable";
+        return "Sable 🏜️";
     case Ble:
-        return "Blé";
+        return "Blé 🌾";
     case Nourriture:
-        return "Nourriture";
+        return "Nourriture 🍛";
     case Pierre:
-        return "Pierre";
+        return "Pierre 🪨";
     case Argent:
-        return "Argent";
+        return "Argent 🥄";
     case Or:
-        return "Or";
+        return "Or 🪙";
     default:
         return "Indéfini";
     }

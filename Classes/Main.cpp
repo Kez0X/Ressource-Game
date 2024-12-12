@@ -3,14 +3,35 @@
 #include <random> // Pour générer des nombres aléatoires
 #include <string>
 #include <ctime>
-
+//#include <nlohmann/json.hpp>
 #include "Board.hpp"
 #include "Player.hpp"
+
+//using json = nlohmann::json;
 
 int randomInt()
 {
     std::srand(std::time(0));
     return std::rand();
+}
+
+bool isValidIndex(const std::string& chooseIndex) {
+    // Vérification que le format de l'index est correct (2 caractères)
+    if (chooseIndex.length() != 2) {
+        return false;
+    }
+
+    // On vérifie que le premier caractère est une lettre entre 'a' et 'g'
+    if (chooseIndex[0] < 'a' || chooseIndex[0] > 'g') {
+        return false;
+    }
+
+    // On vérifie que le second caractère est un chiffre entre '0' et '6'
+    if (chooseIndex[1] < '0' || chooseIndex[1] > '6') {
+        return false;
+    }
+
+    return true;
 }
 
 int main()
@@ -55,18 +76,54 @@ int main()
 
     // Placement des villages de chacuns des joueurs dans l'ordre de jeu
     // 2 villages / joueur
-    int i = 0;
-    while(i<8){
-        // On affiche le plateau
-
-        i++;
+    // Cette liste nous servira pour enregistrer les premiers villages placés de chaque joueurs
+    std::vector<Cell*> first_towns;
+    // On fait 2 tours pour que chaque joueur puisse placer 2 villages
+    for (int turns = 0; turns < 2; turns++)
+    {
+        // Chaque joueur place son village
+        for (int i = 0; i < player_count; i++)
+        {
+            // On affiche le plateau
+            _board->printBoard();
+            // On initialise les variables de réponses et de vérification
+            std::string chooseIndex = "";
+            bool placement = false;
+            // On verifie bien que les données rentrée par l'utilisateur sont cohérentes
+            while (!isValidIndex(chooseIndex) && placement!=true){
+                std::cout << "Entrez l'id de la case que vous souhaitez prendre : ";
+                std::cin >> chooseIndex;
+                // Si c'est ok alors on peut placer le village
+                if(isValidIndex(chooseIndex)){
+                    Cell * chooseCell = _board->getCellByIndex(chooseIndex);
+                    // On regarde si une ville est déjà présente
+                    if (chooseCell->getCity() != nullptr){
+                        // Si ce n'est pas le cas alors on peut sortir de la boucle
+                        placement = true;
+                        // Et placer la ville
+                        City * city = new City(players_list[i]);
+                        chooseCell->addCity(city);
+                        if (turns ==0){
+                            // On garde en mémoire le premier village placer - pour faciliter la suite on enregistre directement la cellule du village
+                            first_towns.push_back(chooseCell);
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    // On garde en mémoire le permier village placer
-
-
-
     // distribution des ressources en fonction du premier village placé
+     for (int i = 0; i < player_count; i++)
+    {
+        // On vérifie qu'on n'est pas sur un des bords du plateau
+        if (first_towns[i]->getleftcell() != nullptr){
+            // On récupère la ressource
+            Ressource ressource_card = first_towns[i]->getleftcell()->getCellRessource();
+            // Une fois la ressource récupéré on récupère la carte du paquet correspondant
+
+        }
+    }
 
 
     // commencement du jeu
