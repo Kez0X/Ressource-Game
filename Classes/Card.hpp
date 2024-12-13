@@ -30,6 +30,7 @@ private:
 
 public:
     //ructeurs
+    Card();
     Card(std::string, std::string, std::string, std::string, TypeCard);
     Card(std::string, std::string, std::string, std::string, TypeCard, bool);
     Card(std::string, std::string, std::string, std::string, TypeCard, bool, status);

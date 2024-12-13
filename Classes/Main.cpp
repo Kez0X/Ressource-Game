@@ -5,10 +5,8 @@
 #include <ctime>
 #include "Board.hpp"
 #include "Player.hpp"
-#include "Utils/json.hpp"
 #include <fstream>
-
-using json = nlohmann::json;
+#include "Decks.hpp"
 
 int randomInt()
 {
@@ -35,54 +33,12 @@ bool isValidIndex(const std::string& chooseIndex) {
     return true;
 }
 
-int deckCreation(){
-    // Ouverture du fichier
-    std::ifstream file("bonus.json");
-
-    // On verif si le fichier a été ouvert correctement
-    if (!file.is_open()) {
-        std::cerr << "Erreur lors de l'ouverture du fichier !" << std::endl;
-        // On retourne -1 en cas d'erreur
-        return -1;
-    }
-
-    // Pour parser le fichier JSON
-    nlohmann::json j;
-    file >> j;
-
-    // Afficher le contenu complet du fichier JSON
-    std::cout << "Contenu complet du fichier JSON :" << std::endl;
-    std::cout << j.dump(4) << std::endl; // dump(4) permet d'afficher le JSON avec une indentation pour la lisibilité // doc officielle github
-
-    // On accede au json et parcourt les bonus
-    std::vector<Card*> piocheBonus;
-    for (const auto& bonus : j["bonus"]["commun"]) {
-        // 15 cartes de chaques pour avoir 45 cartes
-        for (int i = 0; i < 15; i++)
-        {
-            // Création des cartes communes
-            Card * carte = new Card(bonus["id"], bonus["titre"], bonus["desc"], "commun", bonus);
-            piocheBonus.push_back(carte);
-        }
-    }
-    for (const auto& bonus : j["bonus"]["rare"]) {
-        // 5 cartes de chaques pour avoir 20 cartes
-        for (int i = 0; i < 5; i++)
-        {
-            // Création des cartes rare
-            Card * carte = new Card(bonus["id"], bonus["titre"], bonus["desc"], "rare", bonus);
-            piocheBonus.push_back(carte);
-        }
-    }
-
-    return 0;
-}
-
 int main()
 {
     // Initialisation des variables du jeu
     int _turn_number = 0;        // Numéro du tour
     Board *_board = new Board(); // Plateau de jeu
+    Decks *_decks = new Decks(); // Paquets de cartes
 
     // Définition du nombre de joueur entre 2 et 4
     int player_count = 0; // Nombre de joueur
@@ -194,6 +150,8 @@ int main()
             delete _board->getCellByIndex(index);
         }
     }
+
+    delete _decks;
 
     for (int i = 0; i < player_count; i++)
     {

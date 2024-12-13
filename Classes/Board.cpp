@@ -7,10 +7,12 @@
 #include <random>
 #include <ctime>
 #include <vector>
+#include <stdlib.h>
+#include <stdio.h>
 
 int randomInt2()
 {
-    std::srand(std::time(0));
+    std::srand(std::time(NULL));
     return std::rand();
 }
 
@@ -30,6 +32,7 @@ Board::Board()
             Ressource *cellRessource = new Ressource;
             std::string *cellRarity = new std::string;
             drawRessource(cellRessource, cellRarity);
+            std::cout << *cellRessource << " & " << *cellRarity << "\n";
 
             // Choix du numéro du dés
             int cellDiceNumber = _map_dice[*cellRarity][randomInt2() % _map_dice[*cellRarity].size()];
@@ -192,7 +195,8 @@ void Board::drawRessource(Ressource *_ressourceRef, std::string *_rarityRef)
     while (*_rarityRef == "" && *_ressourceRef == undefined)
     {
         // Choix de la rareté
-        std::string selectedRarity = listRarity[randomInt2() % 3];
+        std::srand(std::time(NULL));
+        std::string selectedRarity = listRarity[std::rand() % 3];
 
         // Vérification qu'il existe encore des ressources disponibles
         if (!_map_cases[selectedRarity].empty())
@@ -208,11 +212,16 @@ void Board::drawRessource(Ressource *_ressourceRef, std::string *_rarityRef)
                 }
             }
 
+            std::srand(std::time(NULL));
+            int randomNumber = std::rand() % availableRessources.size();
+
             // Choix de la ressource
-            Ressource selectedRessource = availableRessources[randomInt2() % availableRessources.size()];
+            Ressource selectedRessource = availableRessources[randomNumber];
+
+            std::cout << randomNumber << " : " << availableRessources[randomNumber] << "\n";
 
             // Décrémentation de la ressource
-            _map_cases[selectedRarity][selectedRessource]--;
+            _map_cases[selectedRarity][selectedRessource] = _map_cases[selectedRarity][selectedRessource] - 1 ;
 
             // Suppression si la ressource est égale à 0
             if (_map_cases[selectedRarity][selectedRessource] <= 0)
@@ -234,12 +243,15 @@ Cell* Board::getCellByIndex(std::string index)
 
 void Board::printBoard()
 {
+    std::string plate;
     for (char row = 'a'; row < 'h'; row++)
     {
         for (int column = 0; column < 7; column++)
         {
             std::string index = row + std::to_string(column);
             Cell *currentCell = _board[index];
+
+            std::cout << index;
 
             // Récupérer les informations de la cellule
             Ressource ressource = currentCell->getCellRessource();
@@ -258,12 +270,8 @@ void Board::printBoard()
             {
                 structureInfo = " ";
             }
-
-            // Afficher les informations de la cellule
-            std::cout << "[" << index << "] Ressource: " << ressourceToString(ressource)
-                      << ", Dé: " << diceNumber
-                      << ", Structure: " << structureInfo
-                      << "\n";
+  
+            plate = plate + "| [" + index + "] |" + "\n" + "| " + ressourceToString(ressource) + " |" + "\n" + "| " + "Dé : " + std::to_string(diceNumber) + " |" + "\n" + "| " + structureInfo + " |" + "\n";
         }
     }
 }

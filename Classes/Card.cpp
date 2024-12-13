@@ -2,6 +2,15 @@
 #include <iostream>
 #include <cassert>
 
+Card::Card(){
+    _id = "0";
+    _titre = "Default";
+    _desc = "Default";
+    _rarete = "Default";
+    _type = bonus;
+    _active = false;
+    _status = NotUse;
+};
 
 Card::Card(std::string id, std::string titre, std::string desc, std::string rarete, TypeCard type){
     _id = id;
