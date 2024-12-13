@@ -29,7 +29,7 @@ private:
     status _status;
 
 public:
-    //ructeurs
+    //Constructeurs
     Card();
     Card(std::string, std::string, std::string, std::string, TypeCard);
     Card(std::string, std::string, std::string, std::string, TypeCard, bool);
@@ -49,6 +49,13 @@ public:
     void setNotUseStatus();
     void setUsingStatus();
     void setAlreadyUseStatus();
+    void setId(std::string);
+    void setTitre(std::string);
+    void setDesc(std::string);
+    void setRarete(std::string);
+    void setType(TypeCard);
+    void setStatus(status);
+
 };
 
 #endif

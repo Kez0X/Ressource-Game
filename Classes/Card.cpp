@@ -79,3 +79,23 @@ void Card::setUsingStatus(){
 void Card::setAlreadyUseStatus(){
     _status = alreadyUse;
 };
+
+void Card::setId(std::string id){
+    _id = id;
+};
+
+void Card::setTitre(std::string titre){
+    _titre = titre;
+};
+void Card::setDesc(std::string desc){
+    _desc = desc;
+};
+void Card::setRarete(std::string rarete){
+    _rarete = rarete;
+};
+void Card::setType(TypeCard type){
+    _type = type;
+};
+void Card::setStatus(status statut){
+    _status = statut;
+};
