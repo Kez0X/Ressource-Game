@@ -21,6 +21,9 @@ Board::Board()
     _map_cases = {{"commun", {{Acier, 6}, {Bois, 10}, {Sable, 9}, {Ble, 9}, {Nourriture, 8}}}, {"rare", {{Pierre, 4}}}, {"épique", {{Argent, 2}, {Or, 1}}}};
     _map_dice = {{"commun", {5, 6, 7, 8, 9}}, {"rare", {3, 4, 10, 11}}, {"épique", {1, 2, 12}}};
 
+    // Initialisation de la graine
+    srand(std::time(NULL));
+
     // Création des cellules indépendantes
     for (char row = 'a'; row < 'h'; row++)
     {
@@ -32,10 +35,9 @@ Board::Board()
             Ressource *cellRessource = new Ressource;
             std::string *cellRarity = new std::string;
             drawRessource(cellRessource, cellRarity);
-            std::cout << *cellRessource << " & " << *cellRarity << "\n";
 
             // Choix du numéro du dés
-            int cellDiceNumber = _map_dice[*cellRarity][randomInt2() % _map_dice[*cellRarity].size()];
+            int cellDiceNumber = _map_dice[*cellRarity][rand() % _map_dice[*cellRarity].size()];
 
             // Génération de la cellule
             _board[index] = new Cell(index, *cellRessource, cellDiceNumber, normal);
@@ -195,8 +197,7 @@ void Board::drawRessource(Ressource *_ressourceRef, std::string *_rarityRef)
     while (*_rarityRef == "" && *_ressourceRef == undefined)
     {
         // Choix de la rareté
-        std::srand(std::time(NULL));
-        std::string selectedRarity = listRarity[std::rand() % 3];
+        std::string selectedRarity = listRarity[rand() % 3];
 
         // Vérification qu'il existe encore des ressources disponibles
         if (!_map_cases[selectedRarity].empty())
@@ -212,13 +213,10 @@ void Board::drawRessource(Ressource *_ressourceRef, std::string *_rarityRef)
                 }
             }
 
-            std::srand(std::time(NULL));
-            int randomNumber = std::rand() % availableRessources.size();
+            int randomNumber = rand() % availableRessources.size();
 
             // Choix de la ressource
             Ressource selectedRessource = availableRessources[randomNumber];
-
-            std::cout << randomNumber << " : " << availableRessources[randomNumber] << "\n";
 
             // Décrémentation de la ressource
             _map_cases[selectedRarity][selectedRessource] = _map_cases[selectedRarity][selectedRessource] - 1 ;
@@ -243,38 +241,69 @@ Cell* Board::getCellByIndex(std::string index)
 
 void Board::printBoard()
 {
-    std::string plate;
+    std::cout << "\n";
+    
+    // on print une ligne horizontale supérieure
+    std::cout << "   ";
+    for (int column = 0; column < 7; column++) {
+        std::cout << " [        " << column << "        ] ";
+    }
+    std::cout << "\n";
+    
+    // on print une ligne horizontale supérieure
+    std::cout << "   ";
+    for (int column = 0; column < 7; column++) {
+        std::cout << "---------------------";
+    }
+    std::cout << "\n";
+    
+    // On print chaque ligne du plateau
     for (char row = 'a'; row < 'h'; row++)
     {
+        std::cout << " " << row << " |"; // On affiche l'étiquette de ligne (a, b, c, ...)
+        
         for (int column = 0; column < 7; column++)
         {
             std::string index = row + std::to_string(column);
             Cell *currentCell = _board[index];
-
-            std::cout << index;
-
-            // Récupérer les informations de la cellule
+            
+            // On récupère les informations de la cellule
             Ressource ressource = currentCell->getCellRessource();
             int diceNumber = currentCell->getCellDiceNumber();
             std::string structureInfo;
 
-            // Vérifier si une ville ou un village est présent
+            // On check si une ville ou un village est présent
             const City *city = currentCell->getCity();
             if (city != nullptr)
             {
-                Player * owner = city->getOwner();
-                structureInfo = (city->getCitySize() == small_town ? "Village 🏘️" : "Ville 🌇");
-                structureInfo += "( Propriétaire: " + owner->getName() + " )";
+                Player *owner = city->getOwner();
+                if (city->getCitySize()== small_town){
+                    structureInfo = " 🏘️";
+                }else{
+                    structureInfo = " 🌇";
+                }
+                structureInfo += "( " + owner->getName() + " )";
             }
             else
             {
                 structureInfo = " ";
             }
-  
-            plate = plate + "| [" + index + "] |" + "\n" + "| " + ressourceToString(ressource) + " |" + "\n" + "| " + "Dé : " + std::to_string(diceNumber) + " |" + "\n" + "| " + structureInfo + " |" + "\n";
+            
+            // On affiche les informations de la cellule
+            std::cout << " [" << ressourceToString(ressource) << ", Dé: " << diceNumber << structureInfo << "] ";
+            std::cout << " |";
         }
+        std::cout << "\n";
+        
+        // On print une ligne horizontale après chaque ligne du plateau
+        std::cout << "   ";
+        for (int column = 0; column < 7; column++) {
+            std::cout << "---------------------";
+        }
+        std::cout << "\n";
     }
 }
+
 
 
 std::string Board::ressourceToString(Ressource ressource)
