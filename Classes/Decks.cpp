@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <random>
+#include <algorithm>
 #include <vector>
 #include "../Utils/json.hpp"
 #include "Decks.hpp"
@@ -184,6 +185,7 @@ Card Decks::drawCardFromRessourceDeck(Ressource _ressource)
 
     default:
         break;
+        return SableRessourceDeck;
     }
 }
 

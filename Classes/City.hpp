@@ -1,7 +1,7 @@
 #ifndef CITY_H
 #define CITY_H
 
-class Player;
+#include "Player.hpp"
 
 enum CitySize {
     big_city,

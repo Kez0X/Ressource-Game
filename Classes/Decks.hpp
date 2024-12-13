@@ -1,3 +1,6 @@
+#ifndef DECKS_H
+#define DECKS_H
+
 #include <vector>
 #include "Card.hpp"
 #include "Cell.hpp"
@@ -5,6 +8,7 @@
 class Decks {
 
     private:
+        // TODO: Définition infinie de Card
         Card AcierRessourceDeck;
         Card BoisRessourceDeck;
         Card SableRessourceDeck;
@@ -31,3 +35,5 @@ class Decks {
 
         void addCardToBonusDeck(Card card);
 };
+
+#endif
