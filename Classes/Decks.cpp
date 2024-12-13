@@ -40,38 +40,40 @@ int Decks::fillRessourcesDecksFromJson()
             AcierRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "commun", ressource);
         }
 
-        if (_ressource["id"] == "Bois")
+        else if (_ressource["id"] == "Bois")
         {
-            AcierRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "commun", ressource);
+            BoisRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "commun", ressource);
         }
 
-        if (_ressource["id"] == "Sable")
+        else if (_ressource["id"] == "Sable")
         {
-            AcierRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "commun", ressource);
+            SableRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "commun", ressource);
         }
 
-        if (_ressource["id"] == "Blé")
+        else if (_ressource["id"] == "Blé")
         {
-            AcierRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "commun", ressource);
+            BleRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "commun", ressource);
         }
 
-        if (_ressource["id"] == "Nourriture")
+        else
         {
-            AcierRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "commun", ressource);
+            NourritureRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "commun", ressource);
         }
     }
-    for (const auto &_ressource : j["bonus"]["rare"])
+    for (const auto &_ressource : j["ressource"]["rare"])
     {
         if (_ressource["id"] == "Pierre")
         {
             PierreRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "rare", ressource);
         }
     }
-    for (const auto &_ressource : j["bonus"]["epique"])
+    for (const auto &_ressource : j["ressource"]["epique"])
     {
         if (_ressource["id"] == "Or")
         {
             OrRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "epique", ressource);
+        } else{
+            ArgentRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "epique", ressource);
         }
     }
 

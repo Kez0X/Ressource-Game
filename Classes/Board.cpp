@@ -63,7 +63,6 @@ Board::Board()
 
                 _board[index]->setRightcell(rightCell);
                 _board[index]->setBottomcell(bottomCell);
-                break;
             }
 
             if (index == "a6")
@@ -76,7 +75,6 @@ Board::Board()
 
                 _board[index]->setLeftcell(leftCell);
                 _board[index]->setBottomcell(bottomCell);
-                break;
             }
 
             if (index == "g0")
@@ -89,7 +87,6 @@ Board::Board()
 
                 _board[index]->setTopcell(topCell);
                 _board[index]->setRightcell(rightCell);
-                break;
             }
 
             if (index == "g6")
@@ -102,7 +99,6 @@ Board::Board()
 
                 _board[index]->setTopcell(topCell);
                 _board[index]->setLeftcell(leftCell);
-                break;
             }
 
             if (row == 'a')
@@ -118,7 +114,6 @@ Board::Board()
                 _board[index]->setLeftcell(leftCell);
                 _board[index]->setRightcell(rightCell);
                 _board[index]->setBottomcell(bottomCell);
-                break;
             }
 
             if (row == 'g')
@@ -134,7 +129,6 @@ Board::Board()
                 _board[index]->setLeftcell(leftCell);
                 _board[index]->setRightcell(rightCell);
                 _board[index]->setTopcell(topCell);
-                break;
             }
 
             if (column == 0)
@@ -150,7 +144,6 @@ Board::Board()
                 _board[index]->setRightcell(rightCell);
                 _board[index]->setTopcell(topCell);
                 _board[index]->setBottomcell(bottomCell);
-                break;
             }
 
             if (column == 6)
@@ -166,7 +159,6 @@ Board::Board()
                 _board[index]->setTopcell(topCell);
                 _board[index]->setBottomcell(bottomCell);
                 _board[index]->setLeftcell(leftCell);
-                break;
             }
 
             std::string indexTop = char(row - 1) + std::to_string(column);
