@@ -33,51 +33,85 @@ int Decks::fillRessourcesDecksFromJson()
     // Pour parser le fichier JSON
     nlohmann::json j;
     file >> j;
+
     // On accede au json et parcourt les ressources
-    for (const auto &_ressource : j["ressource"]["commun"])
+    for (const auto &_ressource : j["ressources"]["commun"])
     {
         if (_ressource["id"] == "Acier")
         {
-            AcierRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "commun", ressource);
+            AcierRessourceDeck.setId(_ressource["id"]);
+            AcierRessourceDeck.setTitre(_ressource["titre"]);
+            AcierRessourceDeck.setDesc(_ressource["desc"]);
+            AcierRessourceDeck.setRarete("commun");
+            AcierRessourceDeck.setType(ressource);
         }
 
         else if (_ressource["id"] == "Bois")
         {
-            BoisRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "commun", ressource);
+            BoisRessourceDeck.setId(_ressource["id"]);
+            BoisRessourceDeck.setTitre(_ressource["titre"]);
+            BoisRessourceDeck.setDesc(_ressource["desc"]);
+            BoisRessourceDeck.setRarete("commun");
+            BoisRessourceDeck.setType(ressource);
         }
 
         else if (_ressource["id"] == "Sable")
         {
-            SableRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "commun", ressource);
+            SableRessourceDeck.setId(_ressource["id"]);
+            SableRessourceDeck.setTitre(_ressource["titre"]);
+            SableRessourceDeck.setDesc(_ressource["desc"]);
+            SableRessourceDeck.setRarete("commun");
+            SableRessourceDeck.setType(ressource);
         }
 
         else if (_ressource["id"] == "Blé")
         {
-            BleRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "commun", ressource);
+            BleRessourceDeck.setId(_ressource["id"]);
+            BleRessourceDeck.setTitre(_ressource["titre"]);
+            BleRessourceDeck.setDesc(_ressource["desc"]);
+            BleRessourceDeck.setRarete("commun");
+            BleRessourceDeck.setType(ressource);
         }
 
         else
         {
-            NourritureRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "commun", ressource);
+            NourritureRessourceDeck.setId(_ressource["id"]);
+            NourritureRessourceDeck.setTitre(_ressource["titre"]);
+            NourritureRessourceDeck.setDesc(_ressource["desc"]);
+            NourritureRessourceDeck.setRarete("commun");
+            NourritureRessourceDeck.setType(ressource);
         }
     }
-    for (const auto &_ressource : j["ressource"]["rare"])
+    for (const auto &_ressource : j["ressources"]["rare"])
     {
         if (_ressource["id"] == "Pierre")
         {
-            PierreRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "rare", ressource);
+            PierreRessourceDeck.setId(_ressource["id"]);
+            PierreRessourceDeck.setTitre(_ressource["titre"]);
+            PierreRessourceDeck.setDesc(_ressource["desc"]);
+            PierreRessourceDeck.setRarete("commun");
+            PierreRessourceDeck.setType(ressource);
         }
     }
-    for (const auto &_ressource : j["ressource"]["epique"])
+    for (const auto &_ressource : j["ressources"]["epique"])
     {
         if (_ressource["id"] == "Or")
         {
-            OrRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "epique", ressource);
-        } else{
-            ArgentRessourceDeck = Card(_ressource["id"], _ressource["titre"], _ressource["desc"], "epique", ressource);
+            OrRessourceDeck.setId(_ressource["id"]);
+            OrRessourceDeck.setTitre(_ressource["titre"]);
+            OrRessourceDeck.setDesc(_ressource["desc"]);
+            OrRessourceDeck.setRarete("commun");
+            OrRessourceDeck.setType(ressource);
+        }
+        else
+        {
+            ArgentRessourceDeck.setId(_ressource["id"]);
+            ArgentRessourceDeck.setTitre(_ressource["titre"]);
+            ArgentRessourceDeck.setDesc(_ressource["desc"]);
+            ArgentRessourceDeck.setRarete("commun");
+            ArgentRessourceDeck.setType(ressource);
         }
     }
-
 
     return 0;
 }
@@ -180,12 +214,8 @@ Card Decks::drawCardFromRessourceDeck(Ressource _ressource)
     case Or:
         return OrRessourceDeck;
 
-    case Argent:
-        return ArgentRessourceDeck;
-
     default:
-        break;
-        return SableRessourceDeck;
+        return ArgentRessourceDeck;
     }
 }
 

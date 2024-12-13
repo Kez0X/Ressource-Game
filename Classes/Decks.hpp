@@ -20,11 +20,11 @@ class Decks {
 
         std::vector<Card> BonusDeck;
 
-        int fillRessourcesDecksFromJson();
-        int fillBonusDecksFromJson();
-
     public:
         Decks();
+
+        int fillRessourcesDecksFromJson();
+        int fillBonusDecksFromJson();
 
         std::vector<Card> getBonusDeck() const;
 

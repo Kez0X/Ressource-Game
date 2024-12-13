@@ -215,7 +215,6 @@ int main()
     // distribution des ressources en fonction du premier village placé
      for (int i = 0; i < player_count; i++)
     {
-        std::cout << _decks->drawCardFromRessourceDeck(Bois).getDesc() << "\n";
         // On vérifie qu'on n'est pas sur un des bords du plateau
         if (first_towns[i]->getleftcell() != nullptr){
             // On récupère la ressource
@@ -223,19 +222,8 @@ int main()
             // Une fois la ressource récupéré on récupère la carte du paquet correspondant
             // On donne la carte au joueur concerné
             first_towns[i]->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(ressource_card));
-            std::cout << first_towns[i]->getCity()->getOwner()->getDeck()[0].getId();
         }
-        if (first_towns[i]->getrightcell() != nullptr){
-            // On récupère la ressource
-            Ressource ressource_card = first_towns[i]->getrightcell()->getCellRessource();
-            // Une fois la ressource récupéré on récupère la carte du paquet correspondant
-            // On donne la carte au joueur concerné
-            first_towns[i]->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(ressource_card));
-            std::cout << first_towns[i]->getCity()->getOwner()->getDeck()[0].getId();
-        };
-
-
-        //first_towns[i]->getCity()->getOwner()->printDeck();
+        first_towns[i]->getCity()->getOwner()->printDeck();
     }
 
 
