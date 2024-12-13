@@ -322,3 +322,19 @@ std::string Board::ressourceToString(Ressource ressource)
         return "Indéfini";
     }
 }
+
+std::vector<Cell*> Board::getCellsbyDiceNumber(int diceNumber){
+    std::vector<Cell*> cellsDice;
+    for (char row = 'a'; row < 'h'; row++)
+    {
+        for (int column = 0; column < 7; column++)
+        {
+            std::string index = row + std::to_string(column);
+            if (_board[index]->getCellDiceNumber() == diceNumber){
+                cellsDice.push_back(_board[index]);
+            }
+
+        }
+    }
+    return cellsDice;
+};

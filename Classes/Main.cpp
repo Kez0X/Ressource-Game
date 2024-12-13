@@ -243,15 +243,40 @@ int main()
     while(players_list[player_turn]->getScore() < 20){
         std::string reponse;
         int random_number = rand() % 12;
-        std::cout << "Tour n°" << std::to_string(number_turns) <<" \n";
+        std::cout << "\n" << "=============================" << "Tour n°" << std::to_string(number_turns) <<" \n";
         std::cout << "Joueur " << players_list[player_turn]->getName() << " à vous de jouer ! \n\n";
         std::cout << "Lancement des dés 🎲🎲 \n" << "Le nombre lancé est : " << std::to_string(random_number) << "\n" << "Processing..." << "\n" << "Processing..." << "\n" << "Processing..."
         << "Voici la liste des cases concernés par le lancement du tirage : \n\n";
 
         // Générer la liste des cases concernés par le tirage (id des cellules ayant le numéro du dé contenu)
+        std::vector<Cell*> Cell_list_dice = _board->getCellsbyDiceNumber(random_number);
+        for (int i = 0; i < Cell_list_dice.size(); i++)
+        {
+            std::cout << "- Numéro de cellule : " << Cell_list_dice[i]->getCellID() << " & Ressource : " << Cell_list_dice[i]->getCellRessource() << "\n";
+        }
+
+        // On parcours toutes les cellules adjacentes
+        
         // Une fois qu'on a les id vérifier les villages adjacent et ceux des cellules pour vérifier si il y en a 
         // Si un village est adjacent ou sur une cellule ,dont le numéro du dé a été tiré au sort, alors on donne la ressource présente sur la cellule 
         //,dont le numéro du dé a été tiré au sort, au joueur propriétaire du village (pas uniquement au joueur qui a son tour en cours)
+
+        for (int i = 0; i < Cell_list_dice.size(); i++)
+        {
+                Cell* adjacent_cells[] = {
+                Cell_list_dice[i]->gettopcell(),
+                Cell_list_dice[i]->getleftcell(),
+                Cell_list_dice[i]->getrightcell(),
+                Cell_list_dice[i]->getbottomcell(),
+                Cell_list_dice[i]
+            };
+            
+            for (Cell* cell : adjacent_cells) {
+                if (cell->getCity() != nullptr) { // On check si la cellule est valide
+                    cell->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(Cell_list_dice[i]->getCellRessource()));
+                }
+            }
+        }
         
         // Déroulement d'un tour
         do{
@@ -271,7 +296,7 @@ int main()
         std::cin >> reponse;
 
         if (reponse == "/echange"){
-            // Proposez les différents échanges possible monde ou avec les autres joueurs et développer l'interface 
+            // Proposez les différents échanges possible monde ou avec les autres joueurs et développer l'interface
         }
         else if (reponse == "/play-bonus"){
             // Montrer les différentes cartes bonus

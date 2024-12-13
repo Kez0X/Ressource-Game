@@ -26,10 +26,12 @@ public:
 
     // Méthodes
     Cell* getCellByIndex(std::string);
+    std::vector<Cell*> getCellsbyDiceNumber(int);
 
     void printBoard();
 
     std::string ressourceToString(Ressource);
+
     
 };
 
