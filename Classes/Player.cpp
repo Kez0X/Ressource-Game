@@ -62,6 +62,8 @@ void Player::printDeck() {
     std::map<std::string, int> mapCount;
     std::map<std::string, Card> mapCard;
 
+    std::cout << _name << std::endl;
+
     // On comptabilise les cartes dans mapCount et stocker les informations dans mapCard
     for (int i = 0; i < _deck.size(); i++) {
         if (mapCount.find(_deck[i].getTitre()) != mapCount.end()) {
