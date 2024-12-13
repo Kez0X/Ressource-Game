@@ -59,6 +59,10 @@ TypeCard Card::getType(){
     return _type;
 };
 
+status Card::getStatus(){
+    return _status;
+}
+
 //Setters
 void Card::setActiveCard(){
     _active = true;

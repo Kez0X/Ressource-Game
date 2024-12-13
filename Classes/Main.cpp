@@ -157,11 +157,11 @@ int main()
           << "Les joueurs peuvent échanger des ressources entre eux ou avec le commerce mondial pendant leur tour.\n";
 
         // Petite pause avant de passer à la suite
-    }
-    do{
+        do{
         std::cout << "Tapez 'exit' pour sortir du mode d'emploi \n";
         std::cin >> commande;
-    }while(commande!="exit");
+        }while(commande!="exit");
+    };
 
     // Placement des villages de chacuns des joueurs dans l'ordre de jeu
     // 2 villages / joueur
@@ -221,8 +221,17 @@ int main()
             // On récupère la ressource
             Ressource ressource_card = first_towns[i]->getleftcell()->getCellRessource();
             // Une fois la ressource récupéré on récupère la carte du paquet correspondant
-
+            // On donne la carte au joueur concerné
+            first_towns[i]->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(ressource_card));
         }
+        if (first_towns[i]->getrightcell() != nullptr){
+            // On récupère la ressource
+            Ressource ressource_card = first_towns[i]->getrightcell()->getCellRessource();
+            // Une fois la ressource récupéré on récupère la carte du paquet correspondant
+            // On donne la carte au joueur concerné
+            first_towns[i]->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(ressource_card));
+        };
+        first_towns[i]->getCity()->getOwner()->printDeck();
     }
 
 

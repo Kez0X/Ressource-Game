@@ -32,6 +32,7 @@ public:
 
     // Méthodes
     void addCard(Card);
+    void printDeck();
 };
 
 #endif

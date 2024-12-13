@@ -19,7 +19,7 @@ Decks::Decks()
 int Decks::fillRessourcesDecksFromJson()
 {
     // Ouverture du fichier
-    std::ifstream file("ressources.json");
+    std::ifstream file("../Utils/ressources.json");
 
     // On verif si le fichier a été ouvert correctement
     if (!file.is_open())
@@ -32,11 +32,6 @@ int Decks::fillRessourcesDecksFromJson()
     // Pour parser le fichier JSON
     nlohmann::json j;
     file >> j;
-
-    // Afficher le contenu complet du fichier JSON
-    std::cout << "Contenu complet du fichier JSON :" << std::endl;
-    std::cout << j.dump(4) << std::endl; // dump(4) permet d'afficher le JSON avec une indentation pour la lisibilité // doc officielle github
-
     // On accede au json et parcourt les ressources
     for (const auto &_ressource : j["ressource"]["commun"])
     {
@@ -87,7 +82,7 @@ int Decks::fillRessourcesDecksFromJson()
 int Decks::fillBonusDecksFromJson()
 {
     // Ouverture du fichier
-    std::ifstream file("bonus.json");
+    std::ifstream file("../Utils/bonus.json");
 
     // On verif si le fichier a été ouvert correctement
     if (!file.is_open())
@@ -100,10 +95,6 @@ int Decks::fillBonusDecksFromJson()
     // Pour parser le fichier JSON
     nlohmann::json j;
     file >> j;
-
-    // Afficher le contenu complet du fichier JSON
-    std::cout << "Contenu complet du fichier JSON :" << std::endl;
-    std::cout << j.dump(4) << std::endl; // dump(4) permet d'afficher le JSON avec une indentation pour la lisibilité // doc officielle github
 
     // On accede au json et parcourt les bonus
     for (const auto &_bonus : j["bonus"]["commun"])

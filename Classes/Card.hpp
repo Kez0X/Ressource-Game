@@ -41,6 +41,7 @@ public:
     std::string getDesc();
     std::string getRarete();
     TypeCard getType();
+    status getStatus();
 
     // Setters
     void setActiveCard();
