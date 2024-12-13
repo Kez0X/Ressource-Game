@@ -212,36 +212,122 @@ int main()
     }
 
     _board->printBoard();
-    // distribution des ressources en fonction du premier village placé
-     for (int i = 0; i < player_count; i++)
-    {
-        // On vérifie qu'on n'est pas sur un des bords du plateau
-        if (first_towns[i]->getleftcell() != nullptr){
-            // On récupère la ressource
-            Ressource ressource_card = first_towns[i]->getleftcell()->getCellRessource();
-            // Une fois la ressource récupéré on récupère la carte du paquet correspondant
-            // On donne la carte au joueur concerné
-            first_towns[i]->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(ressource_card));
+    // distribution des ressources en fonction du premier village placé et initialisation des scores
+    for (int i = 0; i < player_count; i++) {
+        players_list[i]->setScore(2);
+        // On récupère les cellules adjacentes
+        Cell* adjacent_cells[] = {
+            first_towns[i]->gettopcell(),
+            first_towns[i]->getleftcell(),
+            first_towns[i]->getrightcell(),
+            first_towns[i]->getbottomcell(),
+        };
+
+        // On parcours toutes les cellules adjacentes
+        for (Cell* cell : adjacent_cells) {
+            if (cell != nullptr) { // On check si la cellule est valide
+                // On récupère la ressource de la cellule
+                Ressource ressource_card = cell->getCellRessource();
+                
+                // On donne une carte de cette ressource au propriétaire de la ville
+                first_towns[i]->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(ressource_card)
+                );
+            }
         }
-        first_towns[i]->getCity()->getOwner()->printDeck();
+        first_towns[i]->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(first_towns[i]->getCellRessource()));
     }
 
-
     // commencement du jeu
+    int player_turn = 0;
+    int number_turns = 1;
+    while(players_list[player_turn]->getScore() < 20){
+        std::string reponse;
+        int random_number = rand() % 12;
+        std::cout << "Tour n°" << std::to_string(number_turns) <<" \n";
+        std::cout << "Joueur " << players_list[player_turn]->getName() << " à vous de jouer ! \n\n";
+        std::cout << "Lancement des dés 🎲🎲 \n" << "Le nombre lancé est : " << std::to_string(random_number) << "\n" << "Processing..." << "\n" << "Processing..." << "\n" << "Processing..."
+        << "Voici la liste des cases concernés par le lancement du tirage : \n\n";
 
+        // Générer la liste des cases concernés par le tirage (id des cellules ayant le numéro du dé contenu)
+        // Une fois qu'on a les id vérifier les villages adjacent et ceux des cellules pour vérifier si il y en a 
+        // Si un village est adjacent ou sur une cellule ,dont le numéro du dé a été tiré au sort, alors on donne la ressource présente sur la cellule 
+        //,dont le numéro du dé a été tiré au sort, au joueur propriétaire du village (pas uniquement au joueur qui a son tour en cours)
+        
         // Déroulement d'un tour
-
+        do{
+        std::string reponse = "";
         // Possibilité durant tout le tour de proposer des échanges avec d'autres joueurs / le commerce mondial
+        std::cout << "Voici la liste des actions que vous pouvez faire : \n" 
+        << "1. Echange avec d'autres joueurs ou avec le commerce mondiale : /echange \n" 
+        << "2. Jouer une ou plusieurs de vos cartes bonus : /play-bonus \n" 
+        << "3. Construire un village : /build \n" 
+        << "4. Améliorer un village en ville : /level-up \n"
+        << "5. Construire une/plusieurs carte(s) bonus : /build-bonus \n"
+        << "6. Consulter votre deck : /deck \n"
+        << "7. Consulter votre nombre de points : /score \n"
+        << "8. Consulter les règles : /man \n"
+        << "9. Mettre fin à votre tour : /end \n"
+        << "Rentrez votre commande : " << std::endl;
+        std::cin >> reponse;
 
-        // Possibilité de jouer des cartes BONUS
+        if (reponse == "/echange"){
+            // Proposez les différents échanges possible monde ou avec les autres joueurs et développer l'interface 
+        }
+        else if (reponse == "/play-bonus"){
+            // Montrer les différentes cartes bonus
+            // Demander laquelle jouer
+            // Lancer l'effet si la carte n'est pas en cours d'utilisation, ni déjà utilisé
+        }
+        else if (reponse == "/build"){
+            // Montrer le coût d'un village
+            // Montrer le deck du joueur
+            // Demander confirmation de la construction ainsi que la case visée
+            // Vérifier que la construction est possible (pas de villes déjà présente et l'utiliasteur possède les ressources nécessaires)
+            // Construire le village
+        }
+        else if (reponse == "/level-up"){
+            // Montrer le coût d'une ville
+            // Montrer le deck du joueur
+            // Demander confirmation de la construction ainsi que la case visée (proposer les cases ayant déjà les villages de l'utilisateur)
+            // Vérifier que la construction est possible (un village du joueur est déjà présent sur la case et l'utiliasteur possède les ressources nécessaires)
+            // Améliorer le village en ville
+        }
+        else if (reponse == "/build-bonus"){
+            // Montrer le coût des cartes bonus
+            // Montrer le deck du joueur
+            // Demander la rareté de la carte voulu
+            // Vérification des ressources
+            // Pioche de la carte bonus avec la rareté correspondante
+            // Affichage de la carte avec sa description
+        }
+        else if (reponse == "/deck"){
+            // Affiche le deck du joueur methode printdeck dans Player
+            players_list[player_turn]->printDeck();
+        }
+        else if (reponse == "/score"){
+            // Affiche le score du player
+            std::cout << std::to_string(players_list[player_turn]->getScore());
+        }
+        else if (reponse == "/man"){
+            // Affiche les règles du jeu
+        }
+        else if (reponse == "/end"){
+            std::cout << "Vous avez décidé de mettre fin à votre tour : " << players_list[player_turn]->getName() << "\n\n" << "=======================================\n";
+            break;
+        }
+        else {
+            std::cout << "La commande rentrée n'existe pas, veuillez rééssayer ! \n";
+        }
+        }while(reponse != "/end");
 
-        // Lancement des dés et distributions des ressources en fonction du placement des villages / villes
 
-        // Possibilité de construire un village / améliorer un village en ville / construire une ou plusieurs cartes bonus
-
-        // Fin du tour
-
-    // Le jeu d'arrête quand un joueur arrive à 20 points
+        if (player_turn == player_count-1){
+            player_turn = 0;
+            number_turns++;
+        }else{
+            player_turn++;
+        }
+    }
 
     // Suppression des variables en mémoire
     for (char row = 'a'; row < 'h'; row++)
