@@ -30,8 +30,8 @@ class Decks {
 
         void shuffleDecks();
 
-        Card drawCardFromRessourceDeck(Ressource ressource);
-        Card drawCardFromBonusDeck();
+        Card drawCardFromRessourceDeck(Ressource);
+        Card drawCardFromBonusDeck(std::string);
 
         void addCardToBonusDeck(Card card);
 };

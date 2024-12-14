@@ -184,12 +184,28 @@ void Decks::shuffleDecks()
     std::random_shuffle(BonusDeck.begin(), BonusDeck.end());
 }
 
-Card Decks::drawCardFromBonusDeck()
+Card Decks::drawCardFromBonusDeck(std::string rarity)
 {
     // On pioche une carte
-    Card _card = BonusDeck.back();
+    Card _card;
+    do
+    {
+        _card = BonusDeck[rand() % BonusDeck.size()];
+    } while (_card.getRarete() != rarity);
+
     // On retire la carte du deck
-    BonusDeck.pop_back();
+    bool erased = false;
+    for (int i = 0; i < BonusDeck.size(); i++)
+    {
+        if (BonusDeck[i].getTitre() == _card.getTitre())
+        {
+            if (!erased)
+            {
+                erased = true;
+            }
+        }
+    }
+
     // On retourne la carte
     return _card;
 }
@@ -222,7 +238,7 @@ Card Decks::drawCardFromRessourceDeck(Ressource _ressource)
     case Argent:
         return ArgentRessourceDeck;
 
-    default: 
+    default:
         std::vector<Card> _ressourceDecksAvailable = {AcierRessourceDeck, BoisRessourceDeck, SableRessourceDeck, BleRessourceDeck, NourritureRessourceDeck, PierreRessourceDeck, OrRessourceDeck, ArgentRessourceDeck};
         std::string _selected = "Default";
         int random = 0;
@@ -232,7 +248,6 @@ Card Decks::drawCardFromRessourceDeck(Ressource _ressource)
             _selected = _ressourceDecksAvailable[random].getTitre();
         }
         return _ressourceDecksAvailable[random];
-        
     }
 }
 

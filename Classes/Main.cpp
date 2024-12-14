@@ -539,11 +539,114 @@ int main()
             else if (response == "/build-bonus")
             {
                 // Montrer le coût des cartes bonus
+                std::cout << "COUT DES CARTES BONUS" << std::endl;
+                std::cout << "- Carte bonus commune : 2 Acier – 5 Bois – 2 Sable – 1 Pierre – 3 Nourriture \n- Carte bonus rare : 4 Acier – 5 Bois – 3 Pierre – 4 Nourriture – 4 Blé – 5 Sable\n- Carte bonus épique : 1 Or – 2 Argent – 5 Bois – 5 Acier – 5 Nourriture – 4 Blé" << std::endl;
+
                 // Montrer le deck du joueur
+                Player *currentPlayer = players_list[number_turns];
+                currentPlayer->printDeck();
+
                 // Demander la rareté de la carte voulu
+                std::string rarity = "Default";
+                while (rarity != "commun" || rarity != "rare" || rarity != "epique")
+                {
+                    std::cout << "Sélectionnez la rareté voulue : ";
+                    std::cin >> rarity;
+                }
+
+                bool enoughRessources = false;
+                int acier, bois, sable, pierre, nourriture, gold, ble, argent = 0;
+                for (int i = 0; i < currentPlayer->getDeck().size(); i++)
+                {
+                    Card _card = currentPlayer->getDeck()[i];
+                    if (_card.getTitre() == "Acier")
+                    {
+                        acier++;
+                    }
+                    else if (_card.getTitre() == "Bois")
+                    {
+                        bois++;
+                    }
+                    else if (_card.getTitre() == "Sable")
+                    {
+                        sable++;
+                    }
+                    else if (_card.getTitre() == "Blé")
+                    {
+                        ble++;
+                    }
+                    else if (_card.getTitre() == "Nourriture")
+                    {
+                        nourriture++;
+                    }
+                    else if (_card.getTitre() == "Pierre")
+                    {
+                        pierre++;
+                    }
+                    else if (_card.getTitre() == "Argent")
+                    {
+                        argent++;
+                    }
+                    else if (_card.getTitre() == "Or")
+                    {
+                        gold++;
+                    }
+                    else
+                    {
+                        // Carte default non supporté ou bonus
+                    }
+                }
+
                 // Vérification des ressources
-                // Pioche de la carte bonus avec la rareté correspondante
-                // Affichage de la carte avec sa description
+                if (rarity == "epique")
+                {
+                    // epique
+                    if (gold >= 1 && argent >= 2 && bois >= 5 && acier >= 5 && nourriture >= 5 && ble >= 4)
+                    {
+                        enoughRessources = true;
+                        std::cout << "Vous possèdez les ressources nécéssaires";
+                    }
+                    else
+                    {
+                        std::cout << "Vous ne possèdez pas les ressources nécéssaires";
+                    }
+                }
+                else if (rarity == "rare")
+                {
+                    // rare
+                    if (acier >= 4 && bois >= 5 && pierre >= 3 && nourriture >= 4 && ble >= 4 && sable >= 5)
+                    {
+                        enoughRessources = true;
+                        std::cout << "Vous possèdez les ressources nécéssaires";
+                    }
+                    else
+                    {
+                        std::cout << "Vous ne possèdez pas les ressources nécéssaires";
+                    }
+                }
+                else
+                {
+                    // commun
+                    if (acier >= 2 && bois >= 5 && sable >= 2 && pierre >= 1 && nourriture >= 3)
+                    {
+                        enoughRessources = true;
+                        std::cout << "Vous possèdez les ressources nécéssaires";
+                    }
+                    else
+                    {
+                        std::cout << "Vous ne possèdez pas les ressources nécéssaires";
+                    }
+                }
+
+                if (enoughRessources)
+                {
+                    // Pioche de la carte bonus avec la rareté correspondante
+                    Card createdBonusCard = _decks->drawCardFromBonusDeck(rarity);
+
+                    // Affichage de la carte avec sa description
+                    std::cout << createdBonusCard.getTitre() << std::endl
+                              << createdBonusCard.getDesc() << std::endl;
+                }
             }
             else if (response == "/deck")
             {
