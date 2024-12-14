@@ -243,7 +243,7 @@ int main()
     while(players_list[player_turn]->getScore() < 20){
         std::string reponse;
         int random_number = rand() % 12;
-        std::cout << "\n" << "=============================" << "Tour n°" << std::to_string(number_turns) <<" \n";
+        std::cout << "\n" << "=============================\n" << "Tour n°" << std::to_string(number_turns) <<" \n";
         std::cout << "Joueur " << players_list[player_turn]->getName() << " à vous de jouer ! \n\n";
         std::cout << "Lancement des dés 🎲🎲 \n" << "Le nombre lancé est : " << std::to_string(random_number) << "\n" << "Processing..." << "\n" << "Processing..." << "\n" << "Processing..."
         << "Voici la liste des cases concernés par le lancement du tirage : \n\n";
@@ -261,7 +261,7 @@ int main()
         // Si un village est adjacent ou sur une cellule ,dont le numéro du dé a été tiré au sort, alors on donne la ressource présente sur la cellule 
         //,dont le numéro du dé a été tiré au sort, au joueur propriétaire du village (pas uniquement au joueur qui a son tour en cours)
 
-        for (int i = 0; i < Cell_list_dice.size(); i++)
+        for (int i = 0; i < Cell_list_dice.size()-1; i++)
         {
                 Cell* adjacent_cells[] = {
                 Cell_list_dice[i]->gettopcell(),
@@ -272,7 +272,7 @@ int main()
             };
             
             for (Cell* cell : adjacent_cells) {
-                if (cell->getCity() != nullptr) { // On check si la cellule est valide
+                if (cell !=nullptr && cell->getCity() != nullptr ) { // On check si la cellule est valide
                     cell->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(Cell_list_dice[i]->getCellRessource()));
                 }
             }
@@ -282,7 +282,7 @@ int main()
         do{
         std::string reponse = "";
         // Possibilité durant tout le tour de proposer des échanges avec d'autres joueurs / le commerce mondial
-        std::cout << "Voici la liste des actions que vous pouvez faire : \n" 
+        std::cout << "\nVoici la liste des actions que vous pouvez faire : \n" 
         << "1. Echange avec d'autres joueurs ou avec le commerce mondiale : /echange \n" 
         << "2. Jouer une ou plusieurs de vos cartes bonus : /play-bonus \n" 
         << "3. Construire un village : /build \n" 
@@ -291,8 +291,8 @@ int main()
         << "6. Consulter votre deck : /deck \n"
         << "7. Consulter votre nombre de points : /score \n"
         << "8. Consulter les règles : /man \n"
-        << "9. Mettre fin à votre tour : /end \n"
-        << "Rentrez votre commande : " << std::endl;
+        << "9. Mettre fin à votre tour : /end \n\n"
+        << "Rentrez votre commande : ";
         std::cin >> reponse;
 
         if (reponse == "/echange"){
