@@ -10,6 +10,11 @@
 
 using json = nlohmann::json;
 
+int randomInt3()
+{
+    return std::rand();
+}
+
 Decks::Decks()
 {
     // Création des decks de ressources et de bonus
@@ -154,7 +159,7 @@ int Decks::fillBonusDecksFromJson()
             BonusDeck.push_back(_card);
         }
     }
-    for (const auto &_bonus : j["bonus"]["épique"])
+    for (const auto &_bonus : j["bonus"]["epique"])
     {
         // 3 cartes de chaques pour avoir 15 cartes
         for (int i = 0; i < 3; i++)
@@ -214,8 +219,20 @@ Card Decks::drawCardFromRessourceDeck(Ressource _ressource)
     case Or:
         return OrRessourceDeck;
 
-    default:
+    case Argent:
         return ArgentRessourceDeck;
+
+    default: 
+        std::vector<Card> _ressourceDecksAvailable = {AcierRessourceDeck, BoisRessourceDeck, SableRessourceDeck, BleRessourceDeck, NourritureRessourceDeck, PierreRessourceDeck, OrRessourceDeck, ArgentRessourceDeck};
+        std::string _selected = "Default";
+        int random = 0;
+        while (_selected == "Default")
+        {
+            random = randomInt3() % 7;
+            _selected = _ressourceDecksAvailable[random].getTitre();
+        }
+        return _ressourceDecksAvailable[random];
+        
     }
 }
 

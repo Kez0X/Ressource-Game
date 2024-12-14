@@ -39,7 +39,7 @@
           "desc": "La victoire n'est plus très loin, continuez d'avancer et vous recevrez les faveurs des autres peuples. Vous gagnez 1 point. Gardez précieusement cette carte jusqu'à la fin."
         }
       ],
-      "épique" :[
+      "epique" :[
         {
           "id": "WinThreePoints",
           "titre": "Gagner trois points",

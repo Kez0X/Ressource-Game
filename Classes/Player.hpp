@@ -22,6 +22,7 @@ public:
     // Getters
     std::string getName();
     std::vector<Card> getDeck();
+    std::vector<Card> getDeckFilter(TypeCard);
     std::vector<std::string> getBonus();
     int getScore();
 
@@ -29,6 +30,7 @@ public:
     void setName(std::string);
     void setBonus(std::vector<std::string>);
     void setScore(int);
+    void setDeck(std::vector<Card>);
 
     // Méthodes
     void addCard(Card);

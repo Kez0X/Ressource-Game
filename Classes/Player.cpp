@@ -33,6 +33,23 @@ std::string Player::getName() {
 std::vector<Card> Player::getDeck() {
     return _deck;
 };
+
+std::vector<Card> Player::getDeckFilter(TypeCard _cardType)
+{
+    std::vector<Card> filteredDeck;
+
+    for (int i = 0; i < _deck.size(); i++)
+    {
+        Card _card = _deck[i];
+        if (_card.getType() == _cardType)
+        {
+            filteredDeck.push_back(_card);
+        }
+    }
+
+    return filteredDeck;
+}
+
 std::vector<std::string> Player::getBonus() {
     return _bonus;
 };
@@ -52,6 +69,10 @@ void Player::setBonus(std::vector<std::string> bonus){
 void Player::setScore(int score){
     _score = score;
 };
+
+void Player::setDeck(std::vector<Card> _newdeck) {
+    _deck = _newdeck;
+}
 
 //Méthodes
 void Player::addCard(Card carte){
