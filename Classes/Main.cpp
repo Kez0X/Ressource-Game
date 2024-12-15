@@ -240,8 +240,15 @@ int main()
     // distribution des ressources en fonction du premier village placé et initialisation des scores
     for (int i = 0; i < player_count; i++)
     {
+        std::cout << "i : " << i << ", nombres de joueurs : " << player_count << std::endl;
         // Pour chaque cellule adjacente,
         // On récupère les cellules adjacentes
+        if (first_towns[i]->getCity() != nullptr){
+            std::cout << "Le problème vient de là !\n";
+            std::cout << first_towns[i]->getCellRessource();
+            first_towns[i]->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(first_towns[i]->getCellRessource()));
+        }
+        
         std::vector<Cell *> adjacentCells = {
             first_towns[i]->gettopcell(),
             first_towns[i]->getleftcell(),
@@ -263,10 +270,7 @@ int main()
                 first_towns[i]->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(ressource_card));
             }
         }
-        if (first_towns[i]->getCity() != nullptr){
-            std::cout << "Le problème vient de là !\n";
-            first_towns[i]->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(first_towns[i]->getCellRessource()));
-        }
+        
     }
 
     std::cout << "Commencement du jeu !";
