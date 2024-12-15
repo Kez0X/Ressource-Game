@@ -4,7 +4,7 @@
 #include <map>
 
 
-// ucteurs
+// Constructeurs
 Player::Player(std::string name){
     _name = name;
     _deck = {};
@@ -159,4 +159,21 @@ void Player::printDeckBonus(){
                       << "Statut : " << statut << "\n\n";
         }
     }
+}
+
+void Player::addBonus(std::string newBonus){
+    _bonus.push_back(newBonus);
+}
+
+bool Player::haveBonus(std::string bonusSearch){
+    bool having = false;
+    int index = 0;
+    while (having != true || index != _bonus.size()-1){
+        if (_bonus[index] == bonusSearch){
+            having = true;
+        }else{
+            index++;
+        }
+    }
+    return having;
 }

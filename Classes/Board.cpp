@@ -332,16 +332,19 @@ std::string Board::ressourceToString(Ressource ressource)
 
 std::vector<Cell*> Board::getCellsbyDiceNumber(int diceNumber){
     std::vector<Cell*> cellsDice;
+    std::cout << "getCellsbyDiceNumber";
+    std::cout << "diceNumber" << diceNumber;
     for (char row = 'a'; row < 'h'; row++)
     {
         for (int column = 0; column < 7; column++)
         {
             std::string index = row + std::to_string(column);
+            std::cout << index;
             if (_board[index]->getCellDiceNumber() == diceNumber){
                 cellsDice.push_back(_board[index]);
             }
 
         }
-    }
+    }   
     return cellsDice;
 };

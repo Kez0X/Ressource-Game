@@ -36,6 +36,8 @@ public:
     void addCard(Card);
     void printDeck();
     void printDeckBonus();
+    void addBonus(std::string);
+    bool haveBonus(std::string);
 };
 
 #endif

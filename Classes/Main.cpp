@@ -39,6 +39,9 @@ int main()
     Board *_board = new Board(); // Plateau de jeu
     Decks *_decks = new Decks(); // Paquets de cartes
     srand(std::time(0));         // Initialisation de la graine
+    // TODO: Définir les maps pour gérer les blockages et doublages de ressources
+    std::map<std::string, int> _block2_map; // Initialisation de la map d'enregistrement des actions blocages avec l'id de la cellule et le tour d'activation
+    // Le tour actuel est : _turn_number
 
     std::cout << "Lancement de la partie" << "\n"
               << "Création du monde..." << "\n"
@@ -267,8 +270,15 @@ int main()
     {
         Player *currentPlayer = players_list[player_turn];
 
+        // On débloque les cellules bloquées depuis un certains nombres de tours
+        for (const auto& pair : _block2_map) {
+            if (pair.second == number_turns-2){
+                _board->getCellByIndex(pair.first)->setStateNormal();
+            }
+        }
+
         std::string response;
-        int random_number = rand() % 12;
+        int random_number = (rand()% 12)+1;
         std::cout << "\n"
                   << "=============================\n"
                   << "Tour n°" << number_turns << " \n";
@@ -278,20 +288,36 @@ int main()
         std::cout << "Voici la liste des cases concernés par le lancement du tirage : " << std::endl;
 
         // Générer la liste des cases concernés par le tirage (id des cellules ayant le numéro du dé contenu)
-        std::vector<Cell *> Cell_list_dice = _board->getCellsbyDiceNumber(random_number);
-        for (int i = 0; i < Cell_list_dice.size(); i++)
-        {
-            std::cout << "- Numéro de cellule : " << Cell_list_dice[i]->getCellID() << " & Ressource : " << Cell_list_dice[i]->getCellRessource() << std::endl;
-        }
+        std::vector<Cell*> Cell_list_dice = _board->getCellsbyDiceNumber(random_number);
+       int count = Cell_list_dice.size();
+       std::cout <<"     count   " << count << "     / ";
+       int i=0;
+       while (i<count)
+       {
+            //TODO : Erreur de segFault qui vient de cette ligne là 
+            // A regarder : https://stackoverflow.com/questions/63832369/segmentation-fault-core-dumped-with-array
+            // Piste : Lors de la def des pointeurs : augmenter la taille allouer
+             std::cout << i;
+            std::cout << "- Numéro de cellule : " << Cell_list_dice[i]->getCellID() << " & Ressource : " << Cell_list_dice[i]->getCellRessource() << "\n";
+             std::cout << " after ";
+            i++;
+             std::cout << i << "    ";
+       }
+
+       // for (int i = 0; i < count; i++)
+       // {
+        //    std::cout << i;
+       //     std::cout << "- Numéro de cellule : " << Cell_list_dice[i]->getCellID() << " & Ressource : " << Cell_list_dice[i]->getCellRessource() << std::endl;
+       // }
 
         // On parcours toutes les cellules adjacentes
 
         // Une fois qu'on a les id vérifier les villages adjacent et ceux des cellules pour vérifier si il y en a
         // Si un village est adjacent ou sur une cellule ,dont le numéro du dé a été tiré au sort, alors on donne la ressource présente sur la cellule
         //,dont le numéro du dé a été tiré au sort, au joueur propriétaire du village (pas uniquement au joueur qui a son tour en cours)
-
         for (int i = 0; i < Cell_list_dice.size() - 1; i++)
         {
+            std::cout << "i:" << i;
             Cell *adjacent_cells[] = {
                 Cell_list_dice[i]->gettopcell(),
                 Cell_list_dice[i]->getleftcell(),
@@ -303,7 +329,20 @@ int main()
             {
                 if (cell != nullptr && cell->getCity() != nullptr)
                 { // On check si la cellule est valide
-                    cell->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(Cell_list_dice[i]->getCellRessource()));
+                    // On verifie les bonus
+                    // TODO: Faire les tests et faire toutes les verifications des bonus juste ici (en fonction des villes etc...)
+                    // Tu peux reeorganiser à ta mainière valou
+                    if (cell->getCity()->getOwner()->haveBonus("doubleRessourcesDuringOneTurn")){
+                        cell->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(Cell_list_dice[i]->getCellRessource()));
+                        cell->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(Cell_list_dice[i]->getCellRessource()));
+                    } else if (cell->getState()==blocked){
+                        std::cout << "La cellule " << cell->getCellID() << " a été bloquée, les ressources ne seront donc pas distribuées aux joueurs adjacents.";
+                    }else if (cell->getCity()->getOwner()->haveBonus("doubleRessourcesDuringThreeTurns")){
+                        cell->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(Cell_list_dice[i]->getCellRessource()));
+                        cell->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(Cell_list_dice[i]->getCellRessource()));
+                    }else{
+                        cell->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(Cell_list_dice[i]->getCellRessource()));
+                    }
                 }
             }
         }
@@ -581,7 +620,9 @@ int main()
                             std::cout << "Cette commande est impossible sur une carte ressource" << std::endl;
                         } else{
                             if (chosenCard.getId() == "stoleACardToAPlayer") {
+                                //TODO : Tester
                                 std::cout << "Effet activé : Voler une carte à un joueur.\n";
+                                chosenCard.setAlreadyUseStatus();
                                 // Implémentation pour voler une carte à un joueur
                                 // Exemple : demander au joueur de choisir un adversaire et une carte ressource à voler
                                std::cout << "Voici la liste des joueurs : " << std::endl;
@@ -597,72 +638,109 @@ int main()
                                if (players_list[targetPlayer-1]->getDeck().size() == 0){
                                 std::cout << "Vous avez mal choisi, le joueur désigné n'a plus de cartes..." << std::endl; 
                                } else{
-                                    int numberChoose = -1;
-                                    int numbers_cards = players_list[targetPlayer-1]->getDeck().size() -1;
-                                    while (numberChoose < 0 || numberChoose > numbers_cards){
-                                        std::cout << "Choisissez un nombre entre 0 et " << numbers_cards << " : ";
-                                        std::cin >> numberChoose;
+                                    std::vector<Card> targetDeck = players_list[targetPlayer-1]->getDeck();
+                                    if (!targetDeck.empty()){
+                                        Card targetCard = targetDeck[targetDeck.size()-1];
+                                        targetDeck.pop_back();
+                                        players_list[player_turn]->addCard(targetCard);
+                                        std::cout << "Le vol a bien été effectué !" << std::endl;
                                     }
-                                    // Valou je te laisse finir
-                                    //players_list[player_turn]->addCard(players_list[targetPlayer-1]->getDeck().erase(numberChoose))
-                                    
-
+                                    std::cout << "Vous avez mal choisi, le joueur désigné n'a plus de cartes..."  << std::endl;
                                }
-                               
-
                             } 
                             else if (chosenCard.getId() == "doubleRessourcesDuringOneTurn") {
+                                // TODO : Tester
                                 std::cout << "Effet activé : Doubler les ressources pendant un tour.\n";
                                 // Implémentation pour doubler les ressources du joueur pendant un tour
-                                //doubleResourcesForTurns(1);
+                                players_list[player_turn]->addBonus("doubleRessourcesDuringOneTurn");
+                                chosenCard.setAlreadyUseStatus();
                             } 
                             else if (chosenCard.getId() == "BlockCellDuringTwoTurn") {
+                                // TODO : Tester
                                 std::cout << "Effet activé : Bloquer une cellule pendant deux tours.\n";
                                 // Implémentation pour bloquer une cellule ressource pendant 2 tours
-                                //blockCellForTurns(2);
+                                _board->printBoard();
+                                std::string chooseIndex = "";
+                                chosenCard.setAlreadyUseStatus();
+                                do {
+                                    std::cout << "Selectionnez la cellule que vous souhaitez bloquer : ";
+                                    std::cin >> chooseIndex;
+                                }while(isValidIndex(chooseIndex));
+                                _board->getCellByIndex(chooseIndex)->setStateBlocked();
+                                std::cout << "La cellule choisie a bien été bloquée" << std::endl;
+                                // On enregistre la cellule qui a été bloqué avec le tour
+                                _block2_map[chooseIndex] = number_turns;
                             } 
                             else if (chosenCard.getId() == "stoleACardToAllPlayers") {
+                                // TODO : Tester
                                 std::cout << "Effet activé : Voler une carte à tous les joueurs.\n";
                                 // Implémentation pour voler une carte à tous les joueurs
-                                //stealCardFromAllPlayers();
+                                for (int i = 0; i < player_count; i++)
+                                {
+                                    if (i != player_turn){
+                                        std::vector<Card> targetDeck = players_list[i]->getDeck();
+                                        if (!targetDeck.empty()){
+                                            Card targetCard = targetDeck[targetDeck.size()-1];
+                                            targetDeck.pop_back();
+                                            players_list[player_turn]->addCard(targetCard);
+                                            std::cout << "Le vol a bien été effectué sur " << players_list[i]->getName() << std::endl;
+                                        }else{
+                                            std::cout << players_list[i]->getName() << " n'a pas de cartes... " << std::endl;
+                                        }
+                                    }
+                                }
+                                chosenCard.setAlreadyUseStatus();
                             } 
                             else if (chosenCard.getId() == "doubleRessourcesDuringThreeTurns") {
                                 std::cout << "Effet activé : Doubler les ressources pendant trois tours.\n";
+                                // TODO : Faire l'action bonus et les verifcations
+                                // Enregistrer le tour d'activation et le joueur
+
                                 // Implémentation pour doubler les ressources du joueur pendant 3 tours
-                                //doubleResourcesForTurns(3);
+                                players_list[player_turn]->addBonus("doubleRessourcesDuringThreeTurns");
+
+                                chosenCard.setAlreadyUseStatus();
                             } 
                             else if (chosenCard.getId() == "BlockCellDuringFiveTurns") {
                                 std::cout << "Effet activé : Bloquer une cellule pendant cinq tours.\n";
+                                // TODO : Mettre en place le bonus
                                 // Implémentation pour bloquer une cellule ressource pendant 5 tours
+                                // Stocké dans un dico le tour d'activation et l'id de la cellule et verif à chaque tour si le tour actuel est égal au tour d'activation + 5
                                 //blockCellForTurns(5);
                             } 
                             else if (chosenCard.getId() == "WinOnePoint") {
                                 std::cout << "Effet activé : Gagner un point.\n";
+                                // TODO : Enfin une étape facile (enregistrer un point supplémentaire au score du joueur)
                                 // Implémentation pour ajouter 1 point au joueur
-                                //addPointsToPlayer(1);
+                                // Score +1
                             } 
                             else if (chosenCard.getId() == "WinThreePoints") {
                                 std::cout << "Effet activé : Gagner trois points.\n";
+                                // TODO : Enfin une étape facile (enregistrer 3 points supplémentaire au score du joueur)
                                 // Implémentation pour ajouter 3 points au joueur
                                 //addPointsToPlayer(3);
                             } 
                             else if (chosenCard.getId() == "stoleARessourceToAllPlayers") {
                                 std::cout << "Effet activé : Voler une ressource à tous les joueurs.\n";
+                                // TODO : A faire
                                 // Implémentation pour voler toutes les ressources d'un type à tous les joueurs
                                 //stealRessourceFromAllPlayers();
                             } 
                             else if (chosenCard.getId() == "DestroyASmallTown") {
                                 std::cout << "Effet activé : Détruire un village.\n";
+                                // TODO: A faire
                                 // Implémentation pour détruire un village
                                 //destroySmallTown();
                             } 
                             else if (chosenCard.getId() == "BlockACityDuringFourTurns") {
                                 std::cout << "Effet activé : Bloquer une ville pendant quatre tours.\n";
+                                // TODO : A faire
                                 // Implémentation pour bloquer une ville pendant 4 tours
                                 //blockCityForTurns(4);
                             } 
                             else if (chosenCard.getId() == "DestroyRessource") {
                                 std::cout << "Effet activé : Détruire une ressource.\n";
+                                // TODO: Supprimer la cellule et mettre en nullptr les pointeurs vers cette cellules attention verif pas de village sur cette cellule 
                                 // Implémentation pour détruire une ressource (case ressource devient inutilisable)
                                 //destroyRessource();
                             } 
@@ -771,6 +849,7 @@ int main()
             }
             else if (response == "/level-up")
             {
+                // TODO: Transformer le village en ville
                 // Montrer le coût d'une ville
                 // Montrer le deck du joueur
                 // Demander confirmation de la construction ainsi que la case visée (proposer les cases ayant déjà les villages de l'utilisateur)
@@ -928,6 +1007,7 @@ int main()
             player_turn++;
         }
     }
+    //TODO : Afficher le nom du gagnant
 
     // Suppression des variables en mémoire
     for (char row = 'a'; row < 'h'; row++)
