@@ -211,7 +211,7 @@ void Board::drawRessource(Ressource *_ressourceRef, std::string *_rarityRef)
             Ressource selectedRessource = availableRessources[randomNumber];
 
             // Décrémentation de la ressource
-            _map_cases[selectedRarity][selectedRessource] = _map_cases[selectedRarity][selectedRessource] - 1 ;
+            _map_cases[selectedRarity][selectedRessource] = _map_cases[selectedRarity][selectedRessource] - 1;
 
             // Suppression si la ressource est égale à 0
             if (_map_cases[selectedRarity][selectedRessource] <= 0)
@@ -226,46 +226,48 @@ void Board::drawRessource(Ressource *_ressourceRef, std::string *_rarityRef)
     }
 }
 
-Cell* Board::getCellByIndex(std::string index)
+Cell *Board::getCellByIndex(std::string index)
 {
     try
     {
         return _board[index];
     }
-    catch(const std::exception& e)
+    catch (const std::exception &e)
     {
         return nullptr;
-    }    
+    }
 }
 
 void Board::printBoard()
 {
     std::cout << "\n";
-    
+
     // on print une ligne horizontale supérieure
     std::cout << "   ";
-    for (int column = 0; column < 7; column++) {
+    for (int column = 0; column < 7; column++)
+    {
         std::cout << " [        " << column << "        ] ";
     }
     std::cout << "\n";
-    
+
     // on print une ligne horizontale supérieure
     std::cout << "   ";
-    for (int column = 0; column < 7; column++) {
+    for (int column = 0; column < 7; column++)
+    {
         std::cout << "---------------------";
     }
     std::cout << "\n";
-    
+
     // On print chaque ligne du plateau
     for (char row = 'a'; row < 'h'; row++)
     {
         std::cout << " " << row << " |"; // On affiche l'étiquette de ligne (a, b, c, ...)
-        
+
         for (int column = 0; column < 7; column++)
         {
             std::string index = row + std::to_string(column);
             Cell *currentCell = _board[index];
-            
+
             // On récupère les informations de la cellule
             Ressource ressource = currentCell->getCellRessource();
             int diceNumber = currentCell->getCellDiceNumber();
@@ -276,9 +278,12 @@ void Board::printBoard()
             if (city != nullptr)
             {
                 Player *owner = city->getOwner();
-                if (city->getCitySize()== small_town){
+                if (city->getCitySize() == small_town)
+                {
                     structureInfo = " 🏘️";
-                }else{
+                }
+                else
+                {
                     structureInfo = " 🌇";
                 }
                 structureInfo += "( " + owner->getName() + " )";
@@ -287,23 +292,22 @@ void Board::printBoard()
             {
                 structureInfo = " ";
             }
-            
+
             // On affiche les informations de la cellule
             std::cout << " [" << ressourceToString(ressource) << ", Dé: " << diceNumber << structureInfo << "] ";
             std::cout << " |";
         }
         std::cout << "\n";
-        
+
         // On print une ligne horizontale après chaque ligne du plateau
         std::cout << "   ";
-        for (int column = 0; column < 7; column++) {
+        for (int column = 0; column < 7; column++)
+        {
             std::cout << "---------------------";
         }
         std::cout << "\n";
     }
 }
-
-
 
 std::string Board::ressourceToString(Ressource ressource)
 {
@@ -330,21 +334,20 @@ std::string Board::ressourceToString(Ressource ressource)
     }
 }
 
-std::vector<Cell*> Board::getCellsbyDiceNumber(int diceNumber){
-    std::vector<Cell*> cellsDice;
-    std::cout << "getCellsbyDiceNumber";
-    std::cout << "diceNumber" << diceNumber;
+std::vector<Cell *> Board::getCellsbyDiceNumber(int diceNumber)
+{
+    std::vector<Cell *> cellsDice = {};
     for (char row = 'a'; row < 'h'; row++)
     {
         for (int column = 0; column < 7; column++)
         {
             std::string index = row + std::to_string(column);
             std::cout << index;
-            if (_board[index]->getCellDiceNumber() == diceNumber){
+            if (_board[index]->getCellDiceNumber() == diceNumber)
+            {
                 cellsDice.push_back(_board[index]);
             }
-
         }
-    }   
+    }
     return cellsDice;
 };

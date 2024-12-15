@@ -16,6 +16,7 @@ private:
 public:
     // Constructeurs
     Player(std::string);
+    Player(std::string, int);
     Player(std::string, std::vector<Card>);
     Player(std::string, std::vector<Card>, std::vector<std::string>, int);
 

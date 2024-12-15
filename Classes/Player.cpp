@@ -12,6 +12,13 @@ Player::Player(std::string name){
     _score = 0;
 };
 
+Player::Player(std::string name, int score){
+    _name = name;
+    _deck = {};
+    _bonus = {};
+    _score = score;
+};
+
 Player::Player(std::string name, std::vector<Card> deck){
     _name = name;
     _deck = deck;
