@@ -10,7 +10,7 @@ class Player
 private:
     std::string _name;
     std::vector<Card> _deck;
-    std::vector<std::string> _bonus; // Une liste d'id des bonus associés aux joueurs qui sont actuellement actifs
+    int _bonus;
     int _score;
 
 public:
@@ -18,18 +18,18 @@ public:
     Player(std::string);
     Player(std::string, int);
     Player(std::string, std::vector<Card>);
-    Player(std::string, std::vector<Card>, std::vector<std::string>, int);
+    Player(std::string, std::vector<Card>, int, int);
 
     // Getters
     std::string getName();
     std::vector<Card> getDeck();
     std::vector<Card> getDeckFilter(TypeCard);
-    std::vector<std::string> getBonus();
+    int getBonus();
     int getScore();
 
     // Setters
     void setName(std::string);
-    void setBonus(std::vector<std::string>);
+    void setBonus(int);
     void setScore(int);
     void setDeck(std::vector<Card>);
 
@@ -37,8 +37,6 @@ public:
     void addCard(Card);
     void printDeck();
     void printDeckBonus();
-    void addBonus(std::string);
-    bool haveBonus(std::string);
 };
 
 #endif

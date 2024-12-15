@@ -8,25 +8,25 @@
 Player::Player(std::string name){
     _name = name;
     _deck = {};
-    _bonus = {};
+    _bonus = 0;
     _score = 0;
 };
 
 Player::Player(std::string name, int score){
     _name = name;
     _deck = {};
-    _bonus = {};
+    _bonus = 0;
     _score = score;
 };
 
 Player::Player(std::string name, std::vector<Card> deck){
     _name = name;
     _deck = deck;
-    _bonus = {};
+    _bonus = 0;
     _score = 0;
 };
 
-Player::Player(std::string name, std::vector<Card> deck, std::vector<std::string> bonus, int score){
+Player::Player(std::string name, std::vector<Card> deck, int bonus, int score){
     _name = name;
     _deck = deck;
     _bonus = bonus;
@@ -57,7 +57,7 @@ std::vector<Card> Player::getDeckFilter(TypeCard _cardType)
     return filteredDeck;
 }
 
-std::vector<std::string> Player::getBonus() {
+int Player::getBonus() {
     return _bonus;
 };
 int Player::getScore() {
@@ -69,7 +69,7 @@ void Player::setName(std::string name){
     _name = name;
 };
 
-void Player::setBonus(std::vector<std::string> bonus){
+void Player::setBonus(int bonus){
     _bonus = bonus;
 };
 
@@ -166,21 +166,4 @@ void Player::printDeckBonus(){
                       << "Statut : " << statut << "\n\n";
         }
     }
-}
-
-void Player::addBonus(std::string newBonus){
-    _bonus.push_back(newBonus);
-}
-
-bool Player::haveBonus(std::string bonusSearch){
-    bool having = false;
-    int index = 0;
-    while (having != true || index != _bonus.size()-1){
-        if (_bonus[index] == bonusSearch){
-            having = true;
-        }else{
-            index++;
-        }
-    }
-    return having;
 }
