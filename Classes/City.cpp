@@ -10,7 +10,7 @@ City::City(Player *owner)
     _owner = owner;
 };
 
-City::City(CitySize size, Player *owner)
+City::City(Player *owner, CitySize size)
 {
     _size = size;
     _owner = owner;

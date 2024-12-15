@@ -16,7 +16,7 @@ class City {
     public:
         // Constructeurs
         City(Player*);
-        City(CitySize, Player*);
+        City(Player*, CitySize);
 
         // Getters
         Player* getOwner() const;

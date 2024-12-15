@@ -5,6 +5,7 @@
 #include <ctime>
 #include "Board.hpp"
 #include "Player.hpp"
+#include "City.hpp"
 #include <fstream>
 #include "Decks.hpp"
 
@@ -683,10 +684,90 @@ int main()
             else if (response == "/build")
             {
                 // Montrer le coût d'un village
+                std::cout << "COUT D'UN VILLAGE " << std::endl;
+                std::cout << "4 bois (pour les fondations) – 2 Sable (Pour les vitres) – 2 Blé (Pour la toiture) – 1 Nourriture (Pour les habitants)" << std::endl;
+
                 // Montrer le deck du joueur
+                Player *currentPlayer = players_list[number_turns]; 
+                currentPlayer->printDeck();
+
+                // Montrer le plateau si besoin
+                std::cout << "Visualiser le plateau ? (oui/non) : ";
+                std::string response = "";
+                std::cin >> response;
+                if (response == "oui")
+                {
+                    _board->printBoard();
+                }
+
                 // Demander confirmation de la construction ainsi que la case visée
-                // Vérifier que la construction est possible (pas de villes déjà présente et l'utiliasteur possède les ressources nécessaires)
-                // Construire le village
+                bool available = false;
+                Cell *cell = nullptr;
+                while (!available)
+                {
+                    std::string casequery = "";
+                    std::cout << "Donnez l'id de la case ou vous souhaitez construire : ";
+                    std::cin >> casequery;
+
+                    cell = _board->getCellByIndex(casequery);
+
+                    if (cell == nullptr)
+                    {
+                        std::cout << "Cette case n'existe pas." << std::endl;
+                        available = false;
+                    } else if (cell->getState() != normal) {
+                        std::cout << "Cette case a été détruite ou est bloquée." << std::endl;
+                        available = false;
+                    } else if (cell->getCity() != nullptr) {
+                        std::cout << "Une ville existe déjà sur cette case." << std::endl;
+                        available = false;
+                    } else {
+                        available = true;
+                    }
+                }
+
+                if (available)
+                {
+                    // vérification des ressources
+                    bool enoughRessources = false;
+                    int bois, sable, nourriture, ble = 0;
+                    for (int i = 0; i < currentPlayer->getDeck().size(); i++)
+                    {
+                        Card _card = currentPlayer->getDeck()[i];
+                        if (_card.getTitre() == "Bois")
+                        {
+                            bois++;
+                        }
+                        else if (_card.getTitre() == "Sable")
+                        {
+                            sable++;
+                        }
+                        else if (_card.getTitre() == "Blé")
+                        {
+                            ble++;
+                        }
+                        else if (_card.getTitre() == "Nourriture")
+                        {
+                            nourriture++;
+                        }
+                    }
+                    if (bois >= 4 && sable >= 2 && ble >= 2 && nourriture >= 1)
+                    {
+                        enoughRessources = true;
+                        std::cout << "Vous possèdez les ressources nécéssaires";
+                    }
+                    else
+                    {
+                        std::cout << "Vous ne possèdez pas les ressources nécéssaires";
+                    }
+
+                    // Construire le village
+                    if (enoughRessources)
+                    {
+                        cell->addCity(new City(currentPlayer, small_town));
+                        std::cout << "Village construit." << std::endl;
+                    } 
+                }
             }
             else if (response == "/level-up")
             {
@@ -854,6 +935,10 @@ int main()
         for (int column = 0; column < 7; column++)
         {
             std::string index = row + std::to_string(column);
+            if (_board->getCellByIndex(index)->getCity() != nullptr)
+            {
+                delete _board->getCellByIndex(index)->getCity();
+            }
             delete _board->getCellByIndex(index);
         }
     }

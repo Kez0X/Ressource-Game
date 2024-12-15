@@ -228,7 +228,14 @@ void Board::drawRessource(Ressource *_ressourceRef, std::string *_rarityRef)
 
 Cell* Board::getCellByIndex(std::string index)
 {
-    return _board[index];
+    try
+    {
+        return _board[index];
+    }
+    catch(const std::exception& e)
+    {
+        return nullptr;
+    }    
 }
 
 void Board::printBoard()
