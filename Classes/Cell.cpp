@@ -48,52 +48,52 @@ Cell::Cell(const std::string id, Ressource ressource, int diceNumber, City city,
 };
 
 // Getters
-const std::string Cell::getCellID()
+std::string Cell::getCellID() const
 {
     return _id;
 }
 
-const Ressource Cell::getCellRessource()
+Ressource Cell::getCellRessource() const
 {
     return _ressource;
 }
 
-const int Cell::getCellDiceNumber()
+int Cell::getCellDiceNumber() const
 {
     return _diceNumber;
 }
 
-const City *Cell::getCity()
+City *Cell::getCity() const
 {
     return _city;
 }
 
-const State Cell::getState()
+State Cell::getState() const
 {
     return _state;
 }
 
-const int Cell::getEffectRemainingTime()
+int Cell::getEffectRemainingTime() const
 {
     return _remainingEffect;
 }
 
-Cell *Cell::gettopcell()
+Cell *Cell::gettopcell() const
 {
     return _topcell;
 };
 
-Cell *Cell::getleftcell()
+Cell *Cell::getleftcell() const
 {
     return _leftcell;
 };
 
-Cell *Cell::getrightcell()
+Cell *Cell::getrightcell() const
 {
     return _rightcell;
 };
 
-Cell *Cell::getbottomcell()
+Cell *Cell::getbottomcell() const
 {
     return _bottomcell;
 };
@@ -114,7 +114,8 @@ void Cell::setStateDestroy()
     _state = destroy;
 }
 
-void Cell::setEffectRemainingTime(int _turnN) {
+void Cell::setEffectRemainingTime(int _turnN)
+{
     _remainingEffect = _turnN;
 }
 

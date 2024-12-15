@@ -45,16 +45,16 @@ public:
     Cell(const std::string, Ressource, int, City, State, Cell, Cell, Cell, Cell);
 
     // Getters
-    const std::string getCellID();
-    const Ressource getCellRessource();
-    const int getCellDiceNumber();
-    const City *getCity();
-    const State getState();
-    const int getEffectRemainingTime();
-    Cell *gettopcell();
-    Cell *getleftcell();
-    Cell *getrightcell();
-    Cell *getbottomcell();
+    std::string getCellID() const;
+    Ressource getCellRessource() const;
+    int getCellDiceNumber() const;
+    City *getCity() const;
+    State getState() const;
+    int getEffectRemainingTime() const;
+    Cell *gettopcell() const;
+    Cell *getleftcell() const;
+    Cell *getrightcell() const;
+    Cell *getbottomcell() const;
 
     // Setters
     void setStateBlocked();

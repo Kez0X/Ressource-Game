@@ -1004,11 +1004,107 @@ int main()
             }
             else if (response == "/level-up")
             {
-                // TODO: Transformer le village en ville
                 // Montrer le coût d'une ville
+                std::cout << "COUT D'UNE VILLE " << std::endl;
+                std::cout << "3 Acier (pour les fondations) – 3 Sable (Pour les vitres) – 2 Pierre (Pour les routes) – 5 Nourriture (pour les habitants) – 6 bois (Pour les poutres et fondations)" << std::endl;
+                
                 // Montrer le deck du joueur
-                // Demander confirmation de la construction ainsi que la case visée (proposer les cases ayant déjà les villages de l'utilisateur)
+                currentPlayer->printDeck();
+
+                // Montrer le plateau si besoin
+                std::cout << "Visualiser le plateau ? (oui/non) : ";
+                std::string response = "";
+                std::cin >> response;
+                if (response == "oui")
+                {
+                    _board->printBoard();
+                }
+
+                // Demander confirmation de l'amélioration ainsi que la case visée
+                bool available = false;
+                Cell *cell = nullptr;
+                while (!available)
+                {
+                    std::string casequery = "";
+                    std::cout << "Donnez l'id de la case ou le village que vous souhaitez améliorer se trouve : ";
+                    std::cin >> casequery;
+
+                    cell = _board->getCellByIndex(casequery);
+
+                    if (cell == nullptr)
+                    {
+                        std::cout << "Cette case n'existe pas." << std::endl;
+                        available = false;
+                    }
+                    else if (cell->getState() != normal)
+                    {
+                        std::cout << "Cette case a été détruite ou est bloquée." << std::endl;
+                        available = false;
+                    }
+                    else if (cell->getCity() == nullptr)
+                    {
+                        std::cout << "Aucun village n'existe sur cette case." << std::endl;
+                        available = false;
+                    }
+                    else if (cell->getCity()->getOwner() != currentPlayer)
+                    {
+                        std::cout << "Le village de cette case ne vous appartient pas." << std::endl;
+                        available = false;
+                    }
+                    else
+                    {
+                        available = true;
+                    }
+                }
+                
                 // Vérifier que la construction est possible (un village du joueur est déjà présent sur la case et l'utiliasteur possède les ressources nécessaires)
+                if (available)
+                {
+                    // vérification des ressources
+                    bool enoughRessources = false;
+                    int acier, bois, sable, nourriture, pierre = 0;
+                    for (int i = 0; i < currentPlayer->getDeck().size(); i++)
+                    {
+                        Card _card = currentPlayer->getDeck()[i];
+                        if (_card.getTitre() == "Bois")
+                        {
+                            bois++;
+                        }
+                        else if (_card.getTitre() == "Sable")
+                        {
+                            sable++;
+                        }
+                        else if (_card.getTitre() == "Bois")
+                        {
+                            bois++;
+                        }
+                        else if (_card.getTitre() == "Nourriture")
+                        {
+                            nourriture++;
+                        } 
+                        else if (_card.getTitre() == "Pierre") 
+                        {
+                            pierre++;
+                        }
+                    }
+                    if (acier >= 3 && sable >= 3 && pierre >= 2 && nourriture >= 5 && bois >= 6)
+                    {
+                        enoughRessources = true;
+                        std::cout << "Vous possèdez les ressources nécéssaires";
+                    }
+                    else
+                    {
+                        std::cout << "Vous ne possèdez pas les ressources nécéssaires";
+                    }
+
+                    // Construire le village
+                    if (enoughRessources)
+                    {
+                        cell->getCity()->setTownToCity();
+                        std::cout << "Village amélioré en ville." << std::endl;
+                    }
+                }
+                
                 // Améliorer le village en ville
             }
             else if (response == "/build-bonus")
