@@ -330,7 +330,7 @@ std::string Board::ressourceToString(Ressource ressource)
     case Or:
         return "Or 🪙";
     default:
-        return "Indéfini";
+        return "Détruit";
     }
 }
 
@@ -342,7 +342,6 @@ std::vector<Cell *> Board::getCellsbyDiceNumber(int diceNumber)
         for (int column = 0; column < 7; column++)
         {
             std::string index = row + std::to_string(column);
-            std::cout << index;
             if (_board[index]->getCellDiceNumber() == diceNumber)
             {
                 cellsDice.push_back(_board[index]);
@@ -350,4 +349,24 @@ std::vector<Cell *> Board::getCellsbyDiceNumber(int diceNumber)
         }
     }
     return cellsDice;
+};
+
+std::vector<Cell *> Board::getTowns()
+{
+    std::vector<Cell *> Cities = {};
+    for (char row = 'a'; row < 'h'; row++)
+    {
+        for (int column = 0; column < 7; column++)
+        {
+            std::string index = row + std::to_string(column);
+            std::cout << index;
+            if (_board[index]->getCity() != nullptr)
+            {
+                if (_board[index]->getCity()->getCitySize() == small_town){
+                    Cities.push_back(_board[index]);
+                }
+            }
+        }
+    }
+    return Cities;
 };

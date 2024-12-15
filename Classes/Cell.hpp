@@ -65,6 +65,8 @@ public:
     void setLeftcell(Cell *leftcell);
     void setRightcell(Cell *rightcell);
     void setBottomcell(Cell *bottomcell);
+    void setCityToDestroy();
+    void setRessourceDestroy();
 
     void addCity(City *city);
 };

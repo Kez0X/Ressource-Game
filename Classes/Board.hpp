@@ -27,6 +27,7 @@ public:
     // Méthodes
     Cell* getCellByIndex(std::string);
     std::vector<Cell*> getCellsbyDiceNumber(int);
+    std::vector<Cell *> getTowns();
 
     void printBoard();
 

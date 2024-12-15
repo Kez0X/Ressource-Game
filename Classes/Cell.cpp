@@ -139,6 +139,14 @@ void Cell::setBottomcell(Cell *bottomcell)
     _bottomcell = bottomcell;
 };
 
+void Cell::setCityToDestroy(){
+    _city = nullptr;
+}
+
+void Cell::setRessourceDestroy(){
+    _ressource = undefined;
+};
+
 void Cell::addCity(City *city)
 {
     _city = city;
