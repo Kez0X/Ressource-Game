@@ -326,199 +326,359 @@ int main()
             std::cin >> response;
 
             if (response == "/echange")
-            {
-                // Sélectionner le type de carte à échanger
-                std::string resType = "";
-                while (!(resType == "bonus" || resType == "ressource"))
                 {
-                    std::cout << "Quelle type de carte souhaitez vous échanger (ressource/bonus) ? ";
-                    std::cin >> resType;
-                }
-                TypeCard tradeCardType = (resType == "bonus") ? bonus : ressource;
-                std::cout << ">" << tradeCardType << "selectionné" << std::endl;
-
-                // Sélectionner la carte à échanger
-                std::cout << "Disponible à l'échange" << std::endl;
-                std::vector<Card> availableForTrade = players_list[player_turn]->getDeckFilter(tradeCardType);
-
-                // Si aucune carte échangeable on arrete tout
-                if (availableForTrade.empty())
-                {
-                    std::cout << "AUCUNE CARTE DISPONIBLE À L'ÉCHANGE DANS VOTRE DECK POUR CETTE CATÉGORIE" << std::endl;
-                }
-                else
-                {
-                    for (int i = 0; i < availableForTrade.size(); i++)
+                    // Sélectionner le type de carte à échanger
+                    std::string resType = "";
+                    while (!(resType == "bonus" || resType == "ressource"))
                     {
-                        std::cout << i << ": " << availableForTrade[i].getTitre() << " (" << availableForTrade[i].getRarete() << ")" << std::endl;
+                        std::cout << "Quel type de carte souhaitez-vous échanger (ressource/bonus) ? ";
+                        std::cin >> resType;
                     }
+                    TypeCard tradeCardType = (resType == "bonus") ? bonus : ressource;
+                    std::cout << ">" << tradeCardType << " sélectionné" << std::endl;
 
-                    int tradeCardNumber = -1;
-                    while (tradeCardNumber < 0 || tradeCardNumber > availableForTrade.size() - 1)
+                    // Sélectionner les cartes disponibles pour échange
+                    std::vector<Card> availableForTrade = players_list[player_turn]->getDeckFilter(tradeCardType);
+
+                    if (availableForTrade.empty())
                     {
-                        std::cout << "Tapez le numéro de la carte à échanger : ";
-                        std::cin >> tradeCardNumber;
-                    }
-                    Card forTradeCard = availableForTrade[tradeCardNumber];
-
-                    std::cout << "> Carte selectionnée : " << availableForTrade[tradeCardNumber].getTitre() << " (" << availableForTrade[tradeCardNumber].getRarete() << ")" << std::endl;
-
-                    // Selection d'avec qui échanger
-                    std::string exchangePerson = "";
-                    while (!(exchangePerson == "monde" || exchangePerson == "joueur"))
-                    {
-                        std::cout << "Avec qui souhaitez-vous échanger ? (monde/joueur)";
-                        std::cin >> exchangePerson;
-                    }
-
-                    if (exchangePerson == "monde")
-                    {
-                        // Échange avec le commerce mondial
-                        std::vector<Card> availableWorldExchange;
-                        for (int i = 0; i < 5; i++)
-                        {
-                            if (tradeCardType == bonus)
-                            {
-                                std::cout << _decks->getBonusDeck()[0].getTitre();
-                                availableWorldExchange.push_back(_decks->getBonusDeck()[rand() % _decks->getBonusDeck().size()]);
-                                std::cout << i << ": " << availableWorldExchange[i].getTitre() << " (" << availableWorldExchange[i].getRarete() << ")" << std::endl;
-                            }
-                            else
-                            {
-                                availableWorldExchange.push_back(_decks->drawCardFromRessourceDeck(undefined));
-                                std::cout << i << ": " << availableWorldExchange[i].getTitre() << " (" << availableWorldExchange[i].getRarete() << ")" << std::endl;
-                            }
-                        }
-
-                        int choice = -1;
-                        while (choice < 0 || choice > availableWorldExchange.size() - 1)
-                        {
-                            std::cout << "Choisissez la carte à échanger (numéro) : ";
-                            std::cin >> choice;
-                        }
-                        Card selectedCardFromWorldForTrade = availableWorldExchange[choice];
-
-                        std::vector<Card> newDeck = {};
-                        bool erased = false;
-                        for (int i = 0; i < currentPlayer->getDeck().size(); i++)
-                        {
-                            if (currentPlayer->getDeck()[i].getTitre() == forTradeCard.getTitre())
-                            {
-                                if (!erased)
-                                {
-                                    erased = true;
-                                    newDeck.push_back(selectedCardFromWorldForTrade);
-                                }
-                            }
-                            else
-                            {
-                                newDeck.push_back(currentPlayer->getDeck()[i]);
-                            }
-                        }
-
-                        // On met à jour le deck du joueur
-                        currentPlayer->setDeck(newDeck);
-
-                        // On termine
-                        std::cout << "Échange terminé" << std::endl;
+                        std::cout << "AUCUNE CARTE DISPONIBLE À L'ÉCHANGE DANS VOTRE DECK POUR CETTE CATÉGORIE." << std::endl;
                     }
                     else
                     {
-                        // Échange avec un joueur
-                        std::cout << "Joueurs ouverts à l'échange" << std::endl;
-                        std::vector<Player *> exchangeOpenPlayers;
-                        for (int i = 0; i < player_count; i++)
+                        // Choisir avec qui échanger
+                        std::string exchangePerson = "";
+                        while (!(exchangePerson == "monde" || exchangePerson == "joueur"))
                         {
-                            if (!(players_list[i]->getDeck().empty() || players_list[i] == currentPlayer))
-                            {
-                                exchangeOpenPlayers.push_back(players_list[i]);
-                                std::cout << exchangeOpenPlayers.size() - 1 << ": " << players_list[i]->getName() << " (" << players_list[i]->getDeckFilter(tradeCardType).size() << " cartes dans son deck)" << std::endl;
-                            }
+                            std::cout << "Avec qui souhaitez-vous échanger ? (monde/joueur) : ";
+                            std::cin >> exchangePerson;
                         }
 
-                        if (exchangeOpenPlayers.empty())
+                        if (exchangePerson == "monde")
                         {
-                            std::cout << "AUCUN JOUEUR NE PEUT ÉCHANGER AVEC VOUS." << std::endl;
+                            // Échange avec le commerce mondial
+                            std::cout << "Votre deck (ressources identiques nécessaires) :" << std::endl;
+                            std::map<std::string, int> cardCount;
+                            for (Card &card : availableForTrade)
+                            {
+                                cardCount[card.getTitre()]++;
+                            }
+
+                            // Afficher les cartes ayant au moins 4 exemplaires
+                            bool hasFour = false;
+                            for (const auto &pair : cardCount)
+                            {
+                                if (pair.second >= 4)
+                                {
+                                    hasFour = true;
+                                    std::cout << "- " << pair.first << " (" << pair.second << " disponibles)" << std::endl;
+                                }
+                            }
+
+                            if (!hasFour)
+                            {
+                                std::cout << "Vous n'avez pas 4 cartes identiques pour un échange avec le monde." << std::endl;
+                            } else {
+                                // Sélection d'une carte à échanger
+                                std::string chosenCard = "";
+                                while (cardCount[chosenCard] < 4)
+                                {
+                                    std::cout << "Entrez le titre de la carte que vous voulez échanger (4 identiques) : ";
+                                    std::cin >> chosenCard;
+                                }
+
+                                // Effectuer l'échange
+                                for (int i = 0, count = 0; i < currentPlayer->getDeck().size() && count < 4; ++i)
+                                {
+                                    if (currentPlayer->getDeck()[i].getTitre() == chosenCard)
+                                    {
+                                        currentPlayer->getDeck().erase(currentPlayer->getDeck().begin() + i);
+                                        --i;
+                                        ++count;
+                                    }
+                                }
+                                Card newCard = _decks->drawCardFromRessourceDeck(undefined);
+                                currentPlayer->getDeck().push_back(newCard);
+                                std::cout << "Vous avez obtenu : " << newCard.getTitre() << std::endl;
+                            }
                         }
                         else
                         {
-                            // Selection d'un joueur
-                            int playerchoice = -1;
-                            while (playerchoice < 0 || playerchoice > exchangeOpenPlayers.size() - 1)
+                            // Échange avec un joueur
+                            std::cout << "Joueurs ouverts à l'échange :" << std::endl;
+                            std::vector<Player *> exchangeOpenPlayers;
+                            for (int i = 0; i < player_count; i++)
                             {
-                                std::cout << "Choisissez le joueur avec qui échanger (numéro) : ";
-                                std::cin >> playerchoice;
-                            }
-                            Player *selectedTradePlayer = exchangeOpenPlayers[playerchoice];
-                            std::cout << "> " << selectedTradePlayer->getName() << " selectionné" << std::endl;
-
-                            // Affichage du deck de l'autre joueur
-                            for (int i = 0; i < selectedTradePlayer->getDeck().size(); i++)
-                            {
-                                std::cout << i << ": " << selectedTradePlayer->getDeck()[i].getTitre() << std::endl;
-                            }
-
-                            // Selection de la carte dans son deck
-                            int cardchoicenumber = -1;
-                            while (cardchoicenumber < 0 || cardchoicenumber > selectedTradePlayer->getDeck().size() - 1)
-                            {
-                                std::cout << "Choisissez la carte à échanger (numéro) : ";
-                                std::cin >> cardchoicenumber;
-                            }
-                            Card selectedCardFromPlayer = selectedTradePlayer->getDeck()[cardchoicenumber];
-
-                            // Démarrage de l'échange
-                            std::vector<Card> newDeckCurrentPlayer = {};
-                            bool erased = false;
-                            for (int i = 0; i < currentPlayer->getDeck().size(); i++)
-                            {
-                                if (currentPlayer->getDeck()[i].getTitre() == forTradeCard.getTitre())
+                                if (!(players_list[i]->getDeck().empty() || players_list[i] == currentPlayer))
                                 {
-                                    if (!erased)
+                                    exchangeOpenPlayers.push_back(players_list[i]);
+                                    std::cout << exchangeOpenPlayers.size() - 1 << ": " << players_list[i]->getName() << " (" 
+                                            << players_list[i]->getDeck().size() << " cartes dans son deck)" << std::endl;
+                                }
+                            }
+
+                            if (exchangeOpenPlayers.empty())
+                            {
+                                std::cout << "AUCUN JOUEUR NE PEUT ÉCHANGER AVEC VOUS." << std::endl;
+                            }
+                            else
+                            {
+                                // Sélection d'un joueur
+                                int playerChoice = -1;
+                                while (playerChoice < 0 || playerChoice >= exchangeOpenPlayers.size())
+                                {
+                                    std::cout << "Choisissez le joueur avec qui échanger (numéro) : ";
+                                    std::cin >> playerChoice;
+                                }
+                                Player *selectedTradePlayer = exchangeOpenPlayers[playerChoice];
+                                std::cout << "> " << selectedTradePlayer->getName() << " sélectionné." << std::endl;
+
+                                // Proposer des cartes à échanger
+                                std::cout << "Votre deck :" << std::endl;
+                                std::vector<Card> currentDeck = currentPlayer->getDeck();
+                                for (int i = 0; i < currentDeck.size(); i++)
+                                {
+                                    std::cout << i << ": " << currentDeck[i].getTitre() << " (" << currentDeck[i].getRarete() << ")" << std::endl;
+                                }
+
+                                std::vector<int> proposedCardsIndices;
+                                int cardIndex = 0;
+                                std::cout << "Entrez les indices des cartes que vous voulez proposer (tapez -1 pour terminer) : ";
+                                while (true)
+                                {
+                                    std::cin >> cardIndex;
+                                    if (cardIndex == -1)
+                                        break;
+                                    if (cardIndex >= 0 && cardIndex < currentDeck.size())
                                     {
-                                        erased = true;
-                                        newDeckCurrentPlayer.push_back(selectedCardFromPlayer);
+                                        proposedCardsIndices.push_back(cardIndex);
                                     }
+                                    else
+                                    {
+                                        std::cout << "Indice invalide, réessayez." << std::endl;
+                                    }
+                                }
+
+                                // Afficher les cartes proposées
+                                std::cout << "Vous proposez :" << std::endl;
+                                for (int index : proposedCardsIndices)
+                                {
+                                    std::cout << "- " << currentDeck[index].getTitre() << std::endl;
+                                }
+
+                                // Demander les cartes de l'adversaire
+                                std::cout << selectedTradePlayer->getName() << " - votre deck :" << std::endl;
+                                std::vector<Card> opponentDeck = selectedTradePlayer->getDeck();
+                                for (int i = 0; i < opponentDeck.size(); i++)
+                                {
+                                    std::cout << i << ": " << opponentDeck[i].getTitre() << " (" << opponentDeck[i].getRarete() << ")" << std::endl;
+                                }
+
+                                std::vector<int> requestedCardsIndices;
+                                cardIndex = 0;
+                                std::cout << "Entrez les indices des cartes que vous voulez demander (tapez -1 pour terminer) : ";
+                                while (true)
+                                {
+                                    std::cin >> cardIndex;
+                                    if (cardIndex == -1)
+                                        break;
+                                    if (cardIndex >= 0 && cardIndex < opponentDeck.size())
+                                    {
+                                        requestedCardsIndices.push_back(cardIndex);
+                                    }
+                                    else
+                                    {
+                                        std::cout << "Indice invalide, réessayez." << std::endl;
+                                    }
+                                }
+
+                                // Afficher les cartes demandées
+                                std::cout << "Vous demandez :" << std::endl;
+                                for (int index : requestedCardsIndices)
+                                {
+                                    std::cout << "- " << opponentDeck[index].getTitre() << std::endl;
+                                }
+
+                                // Demander à l'adversaire d'accepter ou refuser
+                                std::cout << selectedTradePlayer->getName() << ", acceptez-vous cet échange ? (oui/non) : ";
+                                std::string response;
+                                std::cin >> response;
+
+                                if (response == "oui")
+                                {
+                                    // Effectuer l'échange
+                                    std::vector<Card> newDeckCurrentPlayer = currentPlayer->getDeck();
+                                    std::vector<Card> newDeckOpponent = selectedTradePlayer->getDeck();
+
+                                    // Retirer les cartes proposées et ajout à l'adversaire
+                                    for (int index : proposedCardsIndices)
+                                    {
+                                        newDeckOpponent.push_back(currentDeck[index]);
+                                    }
+
+                                    // Retirer les cartes demandées et ajout au joueur actuel
+                                    for (int index : requestedCardsIndices)
+                                    {
+                                        newDeckCurrentPlayer.push_back(opponentDeck[index]);
+                                    }
+
+                                    // Mise à jour des decks
+                                    for (int i = proposedCardsIndices.size() - 1; i >= 0; --i)
+                                    {
+                                        newDeckCurrentPlayer.erase(newDeckCurrentPlayer.begin() + proposedCardsIndices[i]);
+                                    }
+                                    for (int i = requestedCardsIndices.size() - 1; i >= 0; --i)
+                                    {
+                                        newDeckOpponent.erase(newDeckOpponent.begin() + requestedCardsIndices[i]);
+                                    }
+
+                                    currentPlayer->setDeck(newDeckCurrentPlayer);
+                                    selectedTradePlayer->setDeck(newDeckOpponent);
+
+                                    std::cout << "Échange effectué !" << std::endl;
                                 }
                                 else
                                 {
-                                    newDeckCurrentPlayer.push_back(currentPlayer->getDeck()[i]);
+                                    std::cout << selectedTradePlayer->getName() << " a refusé l'échange." << std::endl;
                                 }
                             }
-
-                            erased = false;
-                            std::vector<Card> newDeckOtherPlayer = {};
-                            for (int i = 0; i < selectedTradePlayer->getDeck().size(); i++)
-                            {
-                                if (selectedTradePlayer->getDeck()[i].getTitre() == selectedCardFromPlayer.getTitre())
-                                {
-                                    if (!erased)
-                                    {
-                                        erased = true;
-                                        newDeckOtherPlayer.push_back(forTradeCard);
-                                    }
-                                }
-                                else
-                                {
-                                    newDeckOtherPlayer.push_back(selectedTradePlayer->getDeck()[i]);
-                                }
-                            }
-
-                            // On met à jour le deck du joueur
-                            currentPlayer->setDeck(newDeckCurrentPlayer);
-                            selectedTradePlayer->setDeck(newDeckOtherPlayer);
-
-                            // On termine
-                            std::cout << "Échange terminé" << std::endl;
                         }
                     }
                 }
-            }
+
             else if (response == "/play-bonus")
             {
                 // Montrer les différentes cartes bonus
-                // Demander laquelle jouer
-                // Lancer l'effet si la carte n'est pas en cours d'utilisation, ni déjà utilisé
+                // Vérifier si le joueur a des cartes bonus disponibles
+                std::vector<Card> bonusCards = players_list[player_turn]->getDeckFilter(bonus);
+                if (bonusCards.empty()) {
+                    std::cout << "Vous n'avez aucune carte bonus à jouer." << std::endl;
+                }else{
+                    std::cout << players_list[player_turn]->getName() << " - votre deck :" << std::endl;
+                    for (int i = 0; i < bonusCards.size(); i++)
+                    {
+                        std::cout << i << ": " << bonusCards[i].getTitre() << " (" << bonusCards[i].getRarete() << ")\n" << "Description : " << bonusCards[i].getDesc() << std::endl;
+                    }
+
+                    // Demander au joueur de choisir une carte bonus à jouer
+                    int selectedBonus = -1;
+                    while (selectedBonus < 0 || selectedBonus >= bonusCards.size()) {
+                        std::cout << "Entrez le numéro de la carte bonus que vous souhaitez jouer : ";
+                        std::cin >> selectedBonus;
+
+                        if (selectedBonus < 0 || selectedBonus >= bonusCards.size()) {
+                            std::cout << "Numéro invalide, veuillez réessayer." << std::endl;
+                        }
+                    }
+
+                    // Vérifier l'état de la carte et lancer l'effet si elle peut être utilisée
+                    Card& chosenCard = bonusCards[selectedBonus];
+                    if (chosenCard.getStatus() == NotUse) {
+                        std::cout << "Vous jouez la carte bonus : " << chosenCard.getTitre() << std::endl;
+                        // Lancer l'effet de la carte
+                        if (chosenCard.getType() ==ressource){
+                            std::cout << "Cette commande est impossible sur une carte ressource" << std::endl;
+                        } else{
+                            if (chosenCard.getId() == "stoleACardToAPlayer") {
+                                std::cout << "Effet activé : Voler une carte à un joueur.\n";
+                                // Implémentation pour voler une carte à un joueur
+                                // Exemple : demander au joueur de choisir un adversaire et une carte ressource à voler
+                               std::cout << "Voici la liste des joueurs : " << std::endl;
+                               for (int i = 0; i < player_count; i++)
+                               {
+                                std::cout << std::to_string(i+1) << ". " << players_list[i]->getName();
+                               }
+                               int targetPlayer;
+                               do {
+                                 std::cout << "Choisissez un joueur chez qui voler une carte : " << std::endl;
+                                    std::cin >> targetPlayer;
+                               } while(players_list[targetPlayer-1]->getName() == players_list[player_turn]->getName());
+                               if (players_list[targetPlayer-1]->getDeck().size() == 0){
+                                std::cout << "Vous avez mal choisi, le joueur désigné n'a plus de cartes..." << std::endl; 
+                               } else{
+                                    int numberChoose = -1;
+                                    int numbers_cards = players_list[targetPlayer-1]->getDeck().size() -1;
+                                    while (numberChoose < 0 || numberChoose > numbers_cards){
+                                        std::cout << "Choisissez un nombre entre 0 et " << numbers_cards << " : ";
+                                        std::cin >> numberChoose;
+                                    }
+                                    // Valou je te laisse finir
+                                    //players_list[player_turn]->addCard(players_list[targetPlayer-1]->getDeck().erase(numberChoose))
+                                    
+
+                               }
+                               
+
+                            } 
+                            else if (chosenCard.getId() == "doubleRessourcesDuringOneTurn") {
+                                std::cout << "Effet activé : Doubler les ressources pendant un tour.\n";
+                                // Implémentation pour doubler les ressources du joueur pendant un tour
+                                //doubleResourcesForTurns(1);
+                            } 
+                            else if (chosenCard.getId() == "BlockCellDuringTwoTurn") {
+                                std::cout << "Effet activé : Bloquer une cellule pendant deux tours.\n";
+                                // Implémentation pour bloquer une cellule ressource pendant 2 tours
+                                //blockCellForTurns(2);
+                            } 
+                            else if (chosenCard.getId() == "stoleACardToAllPlayers") {
+                                std::cout << "Effet activé : Voler une carte à tous les joueurs.\n";
+                                // Implémentation pour voler une carte à tous les joueurs
+                                //stealCardFromAllPlayers();
+                            } 
+                            else if (chosenCard.getId() == "doubleRessourcesDuringThreeTurns") {
+                                std::cout << "Effet activé : Doubler les ressources pendant trois tours.\n";
+                                // Implémentation pour doubler les ressources du joueur pendant 3 tours
+                                //doubleResourcesForTurns(3);
+                            } 
+                            else if (chosenCard.getId() == "BlockCellDuringFiveTurns") {
+                                std::cout << "Effet activé : Bloquer une cellule pendant cinq tours.\n";
+                                // Implémentation pour bloquer une cellule ressource pendant 5 tours
+                                //blockCellForTurns(5);
+                            } 
+                            else if (chosenCard.getId() == "WinOnePoint") {
+                                std::cout << "Effet activé : Gagner un point.\n";
+                                // Implémentation pour ajouter 1 point au joueur
+                                //addPointsToPlayer(1);
+                            } 
+                            else if (chosenCard.getId() == "WinThreePoints") {
+                                std::cout << "Effet activé : Gagner trois points.\n";
+                                // Implémentation pour ajouter 3 points au joueur
+                                //addPointsToPlayer(3);
+                            } 
+                            else if (chosenCard.getId() == "stoleARessourceToAllPlayers") {
+                                std::cout << "Effet activé : Voler une ressource à tous les joueurs.\n";
+                                // Implémentation pour voler toutes les ressources d'un type à tous les joueurs
+                                //stealRessourceFromAllPlayers();
+                            } 
+                            else if (chosenCard.getId() == "DestroyASmallTown") {
+                                std::cout << "Effet activé : Détruire un village.\n";
+                                // Implémentation pour détruire un village
+                                //destroySmallTown();
+                            } 
+                            else if (chosenCard.getId() == "BlockACityDuringFourTurns") {
+                                std::cout << "Effet activé : Bloquer une ville pendant quatre tours.\n";
+                                // Implémentation pour bloquer une ville pendant 4 tours
+                                //blockCityForTurns(4);
+                            } 
+                            else if (chosenCard.getId() == "DestroyRessource") {
+                                std::cout << "Effet activé : Détruire une ressource.\n";
+                                // Implémentation pour détruire une ressource (case ressource devient inutilisable)
+                                //destroyRessource();
+                            } 
+                            else {
+                                std::cout << "Effet inconnu. Aucune action n'a été exécutée.\n";
+                            }
+
+                        }
+
+                        // Mettre à jour le statut de la carte
+                        chosenCard.setStatus(Using);
+                    } else if (chosenCard.getStatus() == Using) {
+                        std::cout << "Cette carte est déjà en cours d'utilisation." << std::endl;
+                    } else {
+                        std::cout << "Cette carte a déjà été utilisée." << std::endl;
+                    }
+                }
             }
             else if (response == "/build")
             {
@@ -550,7 +710,7 @@ int main()
                 std::string rarity = "Default";
                 while (rarity != "commun" || rarity != "rare" || rarity != "epique")
                 {
-                    std::cout << "Sélectionnez la rareté voulue : ";
+                    std::cout << "Sélectionnez la rareté voulue (commun/rare/epique): ";
                     std::cin >> rarity;
                 }
 

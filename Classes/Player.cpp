@@ -95,6 +95,15 @@ void Player::printDeck() {
         }
     }
 
+     std::cout << "=== Cartes Ressources ===\n";
+    for (const auto& pair : mapCount) {
+        if (mapCard[pair.first].getType() != bonus) {
+            std::cout << pair.first << " ( " << std::to_string(pair.second) << " ) \n"
+                      << "Description : " << mapCard[pair.first].getDesc() << "\n"
+                      << "Rareté : " << mapCard[pair.first].getRarete() << "\n\n";
+        }
+    }
+
     // On sépare par types de cartes
     std::cout << "=== Cartes Bonus ===\n";
     for (const auto& pair : mapCount) {
@@ -113,12 +122,41 @@ void Player::printDeck() {
                       << "Statut : " << statut << "\n\n";
         }
     }
-    std::cout << "=== Cartes Ressources ===\n";
+   
+}
+
+void Player::printDeckBonus(){
+    std::map<std::string, int> mapCount;
+    std::map<std::string, Card> mapCard;
+
+    std::cout << "\n\n" <<  _name << "\n" << std::endl;
+
+    // On comptabilise les cartes dans mapCount et stocker les informations dans mapCard
+    for (int i = 0; i < _deck.size(); i++) {
+        if (mapCount.find(_deck[i].getTitre()) != mapCount.end()) {
+            mapCount[_deck[i].getTitre()]++;
+        } else {
+            mapCount[_deck[i].getTitre()] = 1;
+            mapCard[_deck[i].getTitre()] = _deck[i];
+        }
+    }
+
+    // On sépare par types de cartes
+    std::cout << "=== Cartes Bonus ===\n";
     for (const auto& pair : mapCount) {
-        if (mapCard[pair.first].getType() != bonus) {
+        if (mapCard[pair.first].getType() == bonus) {
+            std::string statut;
+            if (mapCard[pair.first].getStatus() == NotUse) {
+                statut = "Pas encore utilisé";
+            } else if (mapCard[pair.first].getStatus() == Using) {
+                statut = "En cours d'utilisation";
+            } else {
+                statut = "Déjà utilisé";
+            }
             std::cout << pair.first << " ( " << std::to_string(pair.second) << " ) \n"
                       << "Description : " << mapCard[pair.first].getDesc() << "\n"
-                      << "Rareté : " << mapCard[pair.first].getRarete() << "\n\n";
+                      << "Rareté : " << mapCard[pair.first].getRarete() << "\n"
+                      << "Statut : " << statut << "\n\n";
         }
     }
 }
