@@ -236,44 +236,61 @@ int main()
 
     _board->printBoard();
 
-    
     // distribution des ressources en fonction du premier village placé et initialisation des scores
     for (int i = 0; i < player_count; i++)
     {
         std::cout << "i : " << i << ", nombres de joueurs : " << player_count << std::endl;
         // Pour chaque cellule adjacente,
         // On récupère les cellules adjacentes
-        if (first_towns[i]->getCity() != nullptr){
-            std::cout << "Le problème vient de là !\n";
+        if (first_towns[i]->getCity() != nullptr)
+        {
             std::cout << first_towns[i]->getCellRessource();
             first_towns[i]->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(first_towns[i]->getCellRessource()));
         }
-        
-        std::vector<Cell *> adjacentCells = {
-            first_towns[i]->gettopcell(),
-            first_towns[i]->getleftcell(),
-            first_towns[i]->getrightcell(),
-            first_towns[i]->getbottomcell(),
-        };
+
+        std::vector<Cell *> adjacentCells = {};
+        if (first_towns[i]->gettopcell() != nullptr)
+        {
+            adjacentCells.push_back(first_towns[i]->gettopcell());
+        }
+
+        if (first_towns[i]->getleftcell() != nullptr)
+        {
+            adjacentCells.push_back(first_towns[i]->getleftcell());
+        }
+
+        if (first_towns[i]->getrightcell() != nullptr)
+        {
+            adjacentCells.push_back(first_towns[i]->getrightcell());
+        }
+
+        if (first_towns[i]->getbottomcell() != nullptr)
+        {
+            adjacentCells.push_back(first_towns[i]->getbottomcell());
+        }
 
         // On parcours toutes les cellules adjacentes
         for (int y = 0; y < adjacentCells.size(); y++)
         {
             Cell *_cell = adjacentCells[y];
-            if (_cell != nullptr)
-            { // On check si la cellule est valide
-                // On récupère la ressource de la cellule
-                Ressource ressource_card = _cell->getCellRessource();
-                std::cout << ressource_card << std::endl;
+            // On check si la cellule est valide
+            // On récupère la ressource de la cellule
+            Ressource ressource_card = _cell->getCellRessource();
+            std::cout << ressource_card << std::endl;
 
-                // On donne une carte de cette ressource au propriétaire de la ville
-                first_towns[i]->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(ressource_card));
-            }
+            // On donne une carte de cette ressource au propriétaire de la ville
+            City *_city = first_towns[i]->getCity();
+            std::cout << _city->getCitySize() << std::endl;
+            Player *_owner = _city->getOwner();
+            std::cout << _owner->getName() << std::endl;
+            Card _cardToADD = _decks->drawCardFromRessourceDeck(ressource_card);
+            std::cout << _cardToADD.getTitre();
+            _owner->addCard(_cardToADD);
+            std::cout << "Carte ajoutée" << std::endl;
         }
-        
     }
 
-    std::cout << "Commencement du jeu !";
+    std::cout << "Commencement du jeu !" << std::endl;
 
     // commencement du jeu
     int player_turn = 0;
@@ -289,10 +306,14 @@ int main()
             for (int column = 0; column < 7; column++)
             {
                 std::string index = row + std::to_string(column);
-                Cell *_cell;
+                Cell *_cell = _board->getCellByIndex(index);
                 if (_cell->getEffectRemainingTime() > 0)
                 {
                     _cell->setEffectRemainingTime(_cell->getEffectRemainingTime() - 1);
+                }
+                else if (_cell->getEffectRemainingTime() == 0)
+                {
+                    _cell->setStateNormal();
                 }
             }
         }
@@ -309,6 +330,8 @@ int main()
             Cell_list_dice = _board->getCellsbyDiceNumber(random_number);
         }
 
+        _board->printBoard();
+
         std::cout << "\n"
                   << "=============================\n"
                   << "Tour n°" << number_turns << " \n";
@@ -321,44 +344,56 @@ int main()
         std::string response = "";
         for (int i = 0; i < Cell_list_dice.size(); i++)
         {
-            std::cout << i;
             std::cout << "- Numéro de cellule : " << Cell_list_dice[i]->getCellID() << " & Ressource : " << Cell_list_dice[i]->getCellRessource() << std::endl;
-        }
 
-        // On parcours toutes les cellules adjacentes
-
-        // Une fois qu'on a les id vérifier les villages adjacent et ceux des cellules pour vérifier si il y en a
-        // Si un village est adjacent ou sur une cellule ,dont le numéro du dé a été tiré au sort, alors on donne la ressource présente sur la cellule
-        //,dont le numéro du dé a été tiré au sort, au joueur propriétaire du village (pas uniquement au joueur qui a son tour en cours)
-        for (int i = 0; i < Cell_list_dice.size(); i++)
-        {
-            std::cout << "i:" << i;
-            std::vector<Cell *> adjacent_cells = {
-                Cell_list_dice[i]->gettopcell(),
-                Cell_list_dice[i]->getleftcell(),
-                Cell_list_dice[i]->getrightcell(),
-                Cell_list_dice[i]->getbottomcell(),
-                Cell_list_dice[i]};
-
-            for (int y; y < adjacent_cells.size(); y++)
+            // On parcours toutes les cellules adjacentes
+            std::vector<Cell *> adjacentCells = {};
+            if (Cell_list_dice[i]->gettopcell() != nullptr)
             {
-                Cell *_cell = adjacent_cells[y];
-                if (_cell != nullptr && _cell->getCity() != nullptr)
+                adjacentCells.push_back(Cell_list_dice[i]->gettopcell());
+            }
+
+            if (Cell_list_dice[i]->getleftcell() != nullptr)
+            {
+                adjacentCells.push_back(Cell_list_dice[i]->getleftcell());
+            }
+
+            if (Cell_list_dice[i]->getrightcell() != nullptr)
+            {
+                adjacentCells.push_back(Cell_list_dice[i]->getrightcell());
+            }
+
+            if (Cell_list_dice[i]->getbottomcell() != nullptr)
+            {
+                adjacentCells.push_back(Cell_list_dice[i]->getbottomcell());
+            }
+
+            adjacentCells.push_back(Cell_list_dice[i]);
+
+            // Une fois qu'on a les id vérifier les villages adjacent et ceux des cellules pour vérifier si il y en a
+            // Si un village est adjacent ou sur une cellule ,dont le numéro du dé a été tiré au sort, alors on donne la ressource présente sur la cellule
+            //,dont le numéro du dé a été tiré au sort, au joueur propriétaire du village (pas uniquement au joueur qui a son tour en cours)
+            for (int y = 0; y < adjacentCells.size(); y++)
+            {
+                Cell *_cell = adjacentCells[y];
+
+                if (_cell->getCity() != nullptr)
                 {
-                    // On check si la cellule est valide
+
                     // On verifie les bonus
-                    if (_cell->getCity()->getOwner()->getBonus() > 0)
+                    if (_cell->getState() == blocked)
                     {
-                        _cell->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(Cell_list_dice[i]->getCellRessource()));
-                        _cell->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(Cell_list_dice[i]->getCellRessource()));
+                        std::cout << "La cellule " << _cell->getCellID() << " a été bloquée, les ressources ne seront donc pas distribuées aux joueurs adjacents." << std::endl;
                     }
-                    else if (_cell->getState() == blocked)
+                    else if (_cell->getCity()->getOwner()->getBonus() > 0)
                     {
-                        std::cout << "La cellule " << _cell->getCellID() << " a été bloquée, les ressources ne seront donc pas distribuées aux joueurs adjacents.";
+                        std::cout << "Ressource attribué en double" << std::endl;
+                        _cell->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(Cell_list_dice[i]->getCellRessource()));
+                        _cell->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(Cell_list_dice[i]->getCellRessource()));
                     }
                     else
                     {
-                        std::cout << "Hey !";
+                        std::cout << "Attribution simple" << std::endl;
                         _cell->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(Cell_list_dice[i]->getCellRessource()));
                     }
                 }
@@ -879,14 +914,15 @@ int main()
                                 // On affiche les villes et leurs propriétaires
                                 for (int i = 0; i < listCities.size(); i++)
                                 {
-                                    std::cout << i+1 << ". Village de " << listCities[i]->getCity()->getOwner()->getName() << " : case " << listCities[i]->getCellID() << std::endl;
+                                    std::cout << i + 1 << ". Village de " << listCities[i]->getCity()->getOwner()->getName() << " : case " << listCities[i]->getCellID() << std::endl;
                                 }
-                                do {
+                                do
+                                {
                                     std::cout << "Choisissez le village que vous souhaitez détruire : ";
                                     std::cin >> chooseTown;
-                                }while(chooseTown < 1 && chooseTown > listCities.size());
+                                } while (chooseTown < 1 && chooseTown > listCities.size());
                                 std::cout << "\nDestruction du village en cours...\n";
-                                listCities[chooseTown-1]->setCityToDestroy();
+                                listCities[chooseTown - 1]->setCityToDestroy();
                                 std::cout << "Village détruit !" << std::endl;
                                 chosenCard.setAlreadyUseStatus();
                             }
@@ -915,18 +951,20 @@ int main()
                                 std::string choice = "";
                                 bool valid = false;
                                 std::cout << "\nChoisissez une case ressource à détruire. Attention, vous n'avez pas le droit de sélectionner une case sur laquelle il y a un village ou une ville. \n";
-                                do{
+                                do
+                                {
                                     std::cout << "Rentrez votre choix : ";
                                     std::cin >> choice;
-                                    if (isValidIndex(choice)){
-                                         if (_board->getCellByIndex(choice)->getCity() == nullptr){
+                                    if (isValidIndex(choice))
+                                    {
+                                        if (_board->getCellByIndex(choice)->getCity() == nullptr)
+                                        {
                                             valid = true;
                                         }
                                     }
-                                }while(valid!= true);
+                                } while (valid != true);
                                 _board->getCellByIndex(choice)->setRessourceDestroy();
                                 chosenCard.setAlreadyUseStatus();
-                                
                             }
                             else
                             {
@@ -1045,7 +1083,7 @@ int main()
                 // Montrer le coût d'une ville
                 std::cout << "COUT D'UNE VILLE " << std::endl;
                 std::cout << "3 Acier (pour les fondations) – 3 Sable (Pour les vitres) – 2 Pierre (Pour les routes) – 5 Nourriture (pour les habitants) – 6 bois (Pour les poutres et fondations)" << std::endl;
-                
+
                 // Montrer le deck du joueur
                 currentPlayer->printDeck();
 
@@ -1094,7 +1132,7 @@ int main()
                         available = true;
                     }
                 }
-                
+
                 // Vérifier que la construction est possible (un village du joueur est déjà présent sur la case et l'utiliasteur possède les ressources nécessaires)
                 if (available)
                 {
@@ -1119,8 +1157,8 @@ int main()
                         else if (_card.getTitre() == "Nourriture")
                         {
                             nourriture++;
-                        } 
-                        else if (_card.getTitre() == "Pierre") 
+                        }
+                        else if (_card.getTitre() == "Pierre")
                         {
                             pierre++;
                         }
@@ -1142,7 +1180,7 @@ int main()
                         std::cout << "Village amélioré en ville." << std::endl;
                     }
                 }
-                
+
                 // Améliorer le village en ville
             }
             else if (response == "/build-bonus")
@@ -1156,7 +1194,7 @@ int main()
 
                 // Demander la rareté de la carte voulu
                 std::string rarity = "Default";
-                while (rarity != "commun" || rarity != "rare" || rarity != "epique")
+                while (rarity != "commun" && rarity != "rare" && rarity != "epique")
                 {
                     std::cout << "Sélectionnez la rareté voulue (commun/rare/epique): ";
                     std::cin >> rarity;
@@ -1270,85 +1308,84 @@ int main()
             {
                 // Affiche les règles du jeu
                 std::cout << "## Ressource-Game - Règles du jeu\n\n"
-                  << "### Synopsis :\n"
-                  << "Ressource-Game est un jeu de stratégie en C++ inspiré du jeu *Catane*. L'objectif est de construire des villages et des villes à l'aide de ressources. L'emplacement de vos villages et villes déterminera les ressources disponibles. Les villes doublent les ressources récupérées.\n\n"
+                          << "### Synopsis :\n"
+                          << "Ressource-Game est un jeu de stratégie en C++ inspiré du jeu *Catane*. L'objectif est de construire des villages et des villes à l'aide de ressources. L'emplacement de vos villages et villes déterminera les ressources disponibles. Les villes doublent les ressources récupérées.\n\n"
 
-                  << "### Ressources disponibles :\n"
-                  << "Les ressources nécessaires à la construction des villages et des villes sont les suivantes :\n"
-                  << "- **Acier**\n"
-                  << "- **Bois**\n"
-                  << "- **Sable**\n"
-                  << "- **Pierre**\n"
-                  << "- **Or**\n"
-                  << "- **Blé**\n"
-                  << "- **Argent**\n"
-                  << "- **Nourriture**\n\n"
+                          << "### Ressources disponibles :\n"
+                          << "Les ressources nécessaires à la construction des villages et des villes sont les suivantes :\n"
+                          << "- **Acier**\n"
+                          << "- **Bois**\n"
+                          << "- **Sable**\n"
+                          << "- **Pierre**\n"
+                          << "- **Or**\n"
+                          << "- **Blé**\n"
+                          << "- **Argent**\n"
+                          << "- **Nourriture**\n\n"
 
-                  << "Chaque ressource est répartie sur 48 cases, classées en fonction de leur rareté :\n"
-                  << "- **Acier** (6 cases) - Commun\n"
-                  << "- **Bois** (10 cases) - Commun\n"
-                  << "- **Sable** (9 cases) - Commun\n"
-                  << "- **Pierre** (4 cases) - Rare\n"
-                  << "- **Or** (1 case) - Épique\n"
-                  << "- **Blé** (9 cases) - Commun\n"
-                  << "- **Argent** (2 cases) - Épique\n"
-                  << "- **Nourriture** (8 cases) - Commun\n\n"
+                          << "Chaque ressource est répartie sur 48 cases, classées en fonction de leur rareté :\n"
+                          << "- **Acier** (6 cases) - Commun\n"
+                          << "- **Bois** (10 cases) - Commun\n"
+                          << "- **Sable** (9 cases) - Commun\n"
+                          << "- **Pierre** (4 cases) - Rare\n"
+                          << "- **Or** (1 case) - Épique\n"
+                          << "- **Blé** (9 cases) - Commun\n"
+                          << "- **Argent** (2 cases) - Épique\n"
+                          << "- **Nourriture** (8 cases) - Commun\n\n"
 
-                  << "### Objectif du jeu :\n"
-                  << "Le but est d’atteindre 20 points :\n"
-                  << "- **Village** = 1 point (accède aux ressources adjacentes)\n"
-                  << "- **Ville** = 2 points (accède au double des ressources)\n\n"
+                          << "### Objectif du jeu :\n"
+                          << "Le but est d’atteindre 20 points :\n"
+                          << "- **Village** = 1 point (accède aux ressources adjacentes)\n"
+                          << "- **Ville** = 2 points (accède au double des ressources)\n\n"
 
-                  << "### Construction :\n"
-                  << "Pour construire des villages et des villes, vous devez accumuler les ressources suivantes :\n\n"
+                          << "### Construction :\n"
+                          << "Pour construire des villages et des villes, vous devez accumuler les ressources suivantes :\n\n"
 
-                  << "**Village** :\n"
-                  << "- 4 Bois (fondations)\n"
-                  << "- 2 Sable (vitres)\n"
-                  << "- 2 Blé (toiture)\n"
-                  << "- 1 Nourriture (habitants)\n\n"
+                          << "**Village** :\n"
+                          << "- 4 Bois (fondations)\n"
+                          << "- 2 Sable (vitres)\n"
+                          << "- 2 Blé (toiture)\n"
+                          << "- 1 Nourriture (habitants)\n\n"
 
-                  << "**Ville** :\n"
-                  << "- 3 Acier (fondations)\n"
-                  << "- 3 Sable (vitres)\n"
-                  << "- 2 Pierre (routes)\n"
-                  << "- 5 Nourriture (habitants)\n"
-                  << "- 6 Bois (poutres)\n\n"
+                          << "**Ville** :\n"
+                          << "- 3 Acier (fondations)\n"
+                          << "- 3 Sable (vitres)\n"
+                          << "- 2 Pierre (routes)\n"
+                          << "- 5 Nourriture (habitants)\n"
+                          << "- 6 Bois (poutres)\n\n"
 
-                  << "### Cartes Bonus :\n"
-                  << "Les cartes bonus sont classées en 3 catégories (commune, rare, épique). Voici quelques exemples :\n\n"
+                          << "### Cartes Bonus :\n"
+                          << "Les cartes bonus sont classées en 3 catégories (commune, rare, épique). Voici quelques exemples :\n\n"
 
-                  << "**Carte bonus commune** (45 cartes) :\n"
-                  << "- Voler 1 carte à un joueur\n"
-                  << "- Doubler les ressources pendant 1 tour\n"
-                  << "- Bloquer une case ressource pendant 2 tours\n\n"
+                          << "**Carte bonus commune** (45 cartes) :\n"
+                          << "- Voler 1 carte à un joueur\n"
+                          << "- Doubler les ressources pendant 1 tour\n"
+                          << "- Bloquer une case ressource pendant 2 tours\n\n"
 
-                  << "**Carte bonus rare** (20 cartes) :\n"
-                  << "- Voler 1 carte à chaque joueur\n"
-                  << "- Doubler les ressources pendant 3 tours\n"
-                  << "- Gagner 1 point\n\n"
+                          << "**Carte bonus rare** (20 cartes) :\n"
+                          << "- Voler 1 carte à chaque joueur\n"
+                          << "- Doubler les ressources pendant 3 tours\n"
+                          << "- Gagner 1 point\n\n"
 
-                  << "**Carte bonus épique** (15 cartes) :\n"
-                  << "- Voler toutes les cartes d’une ressource chez chaque joueur\n"
-                  << "- Détruire un village adverse\n"
-                  << "- Assiéger une ville (elle ne peut pas être utilisée pendant 4 tours)\n"
-                  << "- Gagner 3 points\n"
-                  << "- Annihiler une ressource pour le reste de la partie\n\n"
+                          << "**Carte bonus épique** (15 cartes) :\n"
+                          << "- Voler toutes les cartes d’une ressource chez chaque joueur\n"
+                          << "- Détruire un village adverse\n"
+                          << "- Assiéger une ville (elle ne peut pas être utilisée pendant 4 tours)\n"
+                          << "- Gagner 3 points\n"
+                          << "- Annihiler une ressource pour le reste de la partie\n\n"
 
-                  << "### Nombre de joueurs :\n"
-                  << "De 2 à 4 joueurs\n\n"
+                          << "### Nombre de joueurs :\n"
+                          << "De 2 à 4 joueurs\n\n"
 
-                  << "### Début de la partie :\n"
-                  << "Chaque joueur place 2 villages sur le plateau, l’ordre de jeu est déterminé aléatoirement. Après placement, chaque joueur reçoit une ressource de chaque case adjacente au premier village.\n\n"
+                          << "### Début de la partie :\n"
+                          << "Chaque joueur place 2 villages sur le plateau, l’ordre de jeu est déterminé aléatoirement. Après placement, chaque joueur reçoit une ressource de chaque case adjacente au premier village.\n\n"
 
-                  << "### Déroulement d'un tour :\n"
-                  << "1. **Carte bonus** : Le joueur peut jouer une carte bonus de son deck.\n"
-                  << "2. **Lancer des dés** : Chaque joueur reçoit les ressources correspondant aux numéros tirés sur les cases adjacentes à ses villages/ villes.\n"
-                  << "3. **Construction** : Le joueur peut construire des villages, des villes ou des cartes bonus. Il peut également proposer des échanges avec d'autres joueurs ou utiliser le commerce mondial (4 ressources identiques contre 1 différente).\n\n"
+                          << "### Déroulement d'un tour :\n"
+                          << "1. **Carte bonus** : Le joueur peut jouer une carte bonus de son deck.\n"
+                          << "2. **Lancer des dés** : Chaque joueur reçoit les ressources correspondant aux numéros tirés sur les cases adjacentes à ses villages/ villes.\n"
+                          << "3. **Construction** : Le joueur peut construire des villages, des villes ou des cartes bonus. Il peut également proposer des échanges avec d'autres joueurs ou utiliser le commerce mondial (4 ressources identiques contre 1 différente).\n\n"
 
-                  << "### Échanges :\n"
-                  << "Les joueurs peuvent échanger des ressources entre eux ou avec le commerce mondial pendant leur tour.\n";
-
+                          << "### Échanges :\n"
+                          << "Les joueurs peuvent échanger des ressources entre eux ou avec le commerce mondial pendant leur tour.\n";
             }
             else if (response == "/end")
             {
@@ -1403,7 +1440,8 @@ int main()
         delete players_list[i];
     }
 
-    std::cout << "\nMerci d'avoir joué !\n" << std::endl;
+    std::cout << "\nMerci d'avoir joué !\n"
+              << std::endl;
 
     return 0;
 };

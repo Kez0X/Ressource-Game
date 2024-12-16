@@ -7,7 +7,7 @@ Card::Card(){
     _titre = "Default";
     _desc = "Default";
     _rarete = "Default";
-    _type = bonus;
+    _type = ressource;
     _active = false;
     _status = NotUse;
 };

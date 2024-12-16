@@ -78,7 +78,7 @@ int Decks::fillRessourcesDecksFromJson()
             BleRessourceDeck.setType(ressource);
         }
 
-        else
+        else if (_ressource["id"] == "Nourriture")
         {
             NourritureRessourceDeck.setId(_ressource["id"]);
             NourritureRessourceDeck.setTitre(_ressource["titre"]);
@@ -98,7 +98,7 @@ int Decks::fillRessourcesDecksFromJson()
             PierreRessourceDeck.setType(ressource);
         }
     }
-    for (const auto &_ressource : j["ressources"]["epique"])
+    for (const auto &_ressource : j["ressources"]["épique"])
     {
         if (_ressource["id"] == "Or")
         {
@@ -108,7 +108,7 @@ int Decks::fillRessourcesDecksFromJson()
             OrRessourceDeck.setRarete("commun");
             OrRessourceDeck.setType(ressource);
         }
-        else
+        else if (_ressource["id"] == "Argent")
         {
             ArgentRessourceDeck.setId(_ressource["id"]);
             ArgentRessourceDeck.setTitre(_ressource["titre"]);
@@ -244,7 +244,7 @@ Card Decks::drawCardFromRessourceDeck(Ressource _ressource)
         int random = 0;
         while (_selected == "Default")
         {
-            random = randomInt3() % 7;
+            random = randomInt3() % _ressourceDecksAvailable.size();
             _selected = _ressourceDecksAvailable[random].getTitre();
         }
         return _ressourceDecksAvailable[random];
