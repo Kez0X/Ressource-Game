@@ -8,6 +8,7 @@
 class Player
 {
 private:
+    // données privées pour les garder au sein du programme
     std::string _name;
     std::vector<Card> _deck;
     int _bonus;
@@ -34,6 +35,7 @@ public:
     void setDeck(std::vector<Card>);
 
     // Méthodes
+    // Utilisation de ces méthodes au sein d'autres classes
     void addCard(Card);
     void printDeck();
     void printDeckBonus();

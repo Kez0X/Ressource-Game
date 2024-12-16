@@ -45,7 +45,7 @@ int main()
     std::cout << "Lancement de la partie" << "\n"
               << "Création du monde..." << "\n"
               << "Initialisation de l'île..." << "\n\n"
-              << "Bon jeu !" << "\n\n";
+              << "Bon jeu !" << "\n\n" << std::endl;
 
     // Définition du nombre de joueur entre 2 et 4
     int player_count = 0; // Nombre de joueur
@@ -53,6 +53,9 @@ int main()
     {
         std::cout << "Entrez le nombre de joueur souhaités (2-4) : ";
         std::cin >> player_count;
+        if (player_count > 4 || player_count < 1){
+            std::cout << "Le nombre de joueurs rentré ne respecte pas les règles..." << std::endl;
+        }
     }
 
     // Récupération du nom des joueurs et stockage en mémoire des entités
@@ -65,7 +68,7 @@ int main()
         players_list[i] = new Player(name, 2);
     }
 
-    std::cout << "Lancement du module aléatoire ..." << "\n";
+    std::cout << "Lancement du module aléatoire ..." << "\n" << std::endl;
 
     // Définition de l'ordre de jeu
     for (int i = 0; i < player_count; i++)
@@ -83,7 +86,7 @@ int main()
     }
 
     std::string commande;
-    std::cout << "Tapez 'man' pour connaître les règles : \n";
+    std::cout << "\nTapez 'man' pour connaître les règles (sinon tapez n'importe quoi d'autres) : \n";
     std::cin >> commande;
     if (commande == "man")
     {
@@ -165,7 +168,7 @@ int main()
                   << "3. **Construction** : Le joueur peut construire des villages, des villes ou des cartes bonus. Il peut également proposer des échanges avec d'autres joueurs ou utiliser le commerce mondial (4 ressources identiques contre 1 différente).\n\n"
 
                   << "### Échanges :\n"
-                  << "Les joueurs peuvent échanger des ressources entre eux ou avec le commerce mondial pendant leur tour.\n";
+                  << "Les joueurs peuvent échanger des ressources entre eux ou avec le commerce mondial pendant leur tour.\n" << std::endl;
 
         // Petite pause avant de passer à la suite
         do
@@ -187,9 +190,10 @@ int main()
         {
 
             std::cout << "\n-------------------------------------------------------------------------------------------------------\n"
-                      << "Début du jeu : " << "\n"
-                      << "Tours n°" << std::to_string(turns) << "\n"
-                      << "Joueur : " << players_list[i]->getName() << "\n";
+                      << "⭐ Début du jeu ⭐" << "\n"
+                      << "Tours n°0" << "\n"
+                      << "Joueur : " << players_list[i]->getName() << "\n"
+                      << "Vous pouvez placer votre village \n" << std::endl;
             // On affiche le plateau
             _board->printBoard();
             // On initialise les variables de réponses et de vérification
@@ -199,7 +203,7 @@ int main()
             // On demande à l'utilisateur de choisir une case tant que l'index n'est pas valide ou que la case est déjà occupée
             while (!placement)
             {
-                std::cout << "Entrez l'id de la case que vous souhaitez prendre : ";
+                std::cout << "Entrez l'id de la case que vous souhaitez prendre (exemple : a1,b2...): ";
                 std::cin >> chooseIndex;
 
                 // Vérification de la validité de l'index
@@ -223,12 +227,12 @@ int main()
                     }
                     else
                     {
-                        std::cout << "Cette case est déjà occupée par une ville ou un village ! Essayez une autre case.\n";
+                        std::cout << "Cette case est déjà occupée par une ville ou un village ! Essayez une autre case.\n" << std::endl;
                     }
                 }
                 else
                 {
-                    std::cout << "Index invalide ! Veuillez entrer un index valide (ex: a0, b3, c6,...)\n";
+                    std::cout << "Index invalide ! Veuillez entrer un index valide (ex: a0, b3, c6,...)\n" << std::endl;
                 }
             }
         }
@@ -239,12 +243,10 @@ int main()
     // distribution des ressources en fonction du premier village placé et initialisation des scores
     for (int i = 0; i < player_count; i++)
     {
-        std::cout << "i : " << i << ", nombres de joueurs : " << player_count << std::endl;
         // Pour chaque cellule adjacente,
         // On récupère les cellules adjacentes
         if (first_towns[i]->getCity() != nullptr)
         {
-            std::cout << first_towns[i]->getCellRessource();
             first_towns[i]->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(first_towns[i]->getCellRessource()));
         }
 
@@ -276,21 +278,16 @@ int main()
             // On check si la cellule est valide
             // On récupère la ressource de la cellule
             Ressource ressource_card = _cell->getCellRessource();
-            std::cout << ressource_card << std::endl;
 
             // On donne une carte de cette ressource au propriétaire de la ville
             City *_city = first_towns[i]->getCity();
-            std::cout << _city->getCitySize() << std::endl;
             Player *_owner = _city->getOwner();
-            std::cout << _owner->getName() << std::endl;
             Card _cardToADD = _decks->drawCardFromRessourceDeck(ressource_card);
-            std::cout << _cardToADD.getTitre();
             _owner->addCard(_cardToADD);
-            std::cout << "Carte ajoutée" << std::endl;
         }
     }
 
-    std::cout << "Commencement du jeu !" << std::endl;
+    std::cout << "\n🎮 Début du jeu 🎮\n" << std::endl;
 
     // commencement du jeu
     int player_turn = 0;
@@ -337,14 +334,14 @@ int main()
                   << "Tour n°" << number_turns << " \n";
         std::cout << "Joueur " << players_list[player_turn]->getName() << " à vous de jouer ! \n\n";
         std::cout << "Lancement des dés 🎲🎲 \n"
-                  << "Le nombre lancé est : " << random_number << std::endl;
+                  << "Le nombre lancé est : " << random_number << "\n\n" << std::endl;
         std::cout << "Voici la liste des cases concernés par le lancement du tirage : " << std::endl;
 
         // Générer la liste des cases concernés par le tirage (id des cellules ayant le numéro du dé contenu)
         std::string response = "";
         for (int i = 0; i < Cell_list_dice.size(); i++)
         {
-            std::cout << "- Numéro de cellule : " << Cell_list_dice[i]->getCellID() << " & Ressource : " << Cell_list_dice[i]->getCellRessource() << std::endl;
+            std::cout << "- Numéro de cellule : " << Cell_list_dice[i]->getCellID() << std::endl;
 
             // On parcours toutes les cellules adjacentes
             std::vector<Cell *> adjacentCells = {};
@@ -393,7 +390,6 @@ int main()
                     }
                     else
                     {
-                        std::cout << "Attribution simple" << std::endl;
                         _cell->getCity()->getOwner()->addCard(_decks->drawCardFromRessourceDeck(Cell_list_dice[i]->getCellRessource()));
                     }
                 }
@@ -413,7 +409,8 @@ int main()
                       << "6. Consulter votre deck : /deck \n"
                       << "7. Consulter votre nombre de points : /score \n"
                       << "8. Consulter les règles : /man \n"
-                      << "9. Mettre fin à votre tour : /end \n\n"
+                      << "9. Afficher le plateau : /board \n"
+                      << "10. Mettre fin à votre tour : /end \n\n"
                       << "Rentrez votre commande : ";
             std::cin >> response;
 
@@ -449,7 +446,7 @@ int main()
                     if (exchangePerson == "monde")
                     {
                         // Échange avec le commerce mondial
-                        std::cout << "Votre deck (ressources identiques nécessaires) :" << std::endl;
+                        std::cout << "Votre deck (4 ressources identiques nécessaires) :" << std::endl;
                         std::map<std::string, int> cardCount;
                         for (Card &card : availableForTrade)
                         {
@@ -528,7 +525,7 @@ int main()
                             std::cout << "> " << selectedTradePlayer->getName() << " sélectionné." << std::endl;
 
                             // Proposer des cartes à échanger
-                            std::cout << "Votre deck :" << std::endl;
+                            std::cout << "Choisissez les cartes que vous souhaitez proposer pour échange : " << std::endl;
                             std::vector<Card> currentDeck = currentPlayer->getDeck();
                             for (int i = 0; i < currentDeck.size(); i++)
                             {
@@ -561,7 +558,7 @@ int main()
                             }
 
                             // Demander les cartes de l'adversaire
-                            std::cout << selectedTradePlayer->getName() << " - votre deck :" << std::endl;
+                            std::cout << selectedTradePlayer->getName() << " deck - Choisissez les cartes que vous souhaiteriez recevoir en échnage des cartes proposées : " << std::endl;
                             std::vector<Card> opponentDeck = selectedTradePlayer->getDeck();
                             for (int i = 0; i < opponentDeck.size(); i++)
                             {
@@ -923,6 +920,9 @@ int main()
                                 } while (chooseTown < 1 && chooseTown > listCities.size());
                                 std::cout << "\nDestruction du village en cours...\n";
                                 listCities[chooseTown - 1]->setCityToDestroy();
+                                int newScore = listCities[chooseTown -1]->getCity()->getOwner()->getScore() -1;
+                                listCities[chooseTown -1]->getCity()->getOwner()->setScore(newScore);
+                                delete listCities[chooseTown -1];
                                 std::cout << "Village détruit !" << std::endl;
                                 chosenCard.setAlreadyUseStatus();
                             }
@@ -1002,8 +1002,11 @@ int main()
                 {
                     _board->printBoard();
                 }
-
-                // Demander confirmation de la construction ainsi que la case visée
+                response = "";
+                std::cout << "Souhaitez vous continuer la construction du village ? (oui/non) : ";
+                std::cin >> response;
+                if (response == "oui"){
+                    // Demander confirmation de la construction ainsi que la case visée
                 bool available = false;
                 Cell *cell = nullptr;
                 while (!available)
@@ -1074,9 +1077,15 @@ int main()
                     if (enoughRessources)
                     {
                         cell->addCity(new City(currentPlayer, small_town));
+                        int newScore = currentPlayer->getScore()+1;
+                        // On incrémente le nouveau score
+                        currentPlayer->setScore(newScore);
                         std::cout << "Village construit." << std::endl;
                     }
                 }
+            }else{
+                std::cout << "\nContruction annulée\n" << std::endl;
+            }
             }
             else if (response == "/level-up")
             {
@@ -1177,6 +1186,8 @@ int main()
                     if (enoughRessources)
                     {
                         cell->getCity()->setTownToCity();
+                        int initialScore = cell->getCity()->getOwner()->getScore();
+                        cell->getCity()->getOwner()->setScore(initialScore+1);
                         std::cout << "Village amélioré en ville." << std::endl;
                     }
                 }
@@ -1237,10 +1248,7 @@ int main()
                     {
                         gold++;
                     }
-                    else
-                    {
-                        // Carte default non supporté ou bonus
-                    }
+                    // Carte default non supporté ou bonus
                 }
 
                 // Vérification des ressources
@@ -1263,11 +1271,11 @@ int main()
                     if (acier >= 4 && bois >= 5 && pierre >= 3 && nourriture >= 4 && ble >= 4 && sable >= 5)
                     {
                         enoughRessources = true;
-                        std::cout << "Vous possèdez les ressources nécéssaires";
+                        std::cout << "Vous possèdez les ressources nécéssaires" << std::endl;
                     }
                     else
                     {
-                        std::cout << "Vous ne possèdez pas les ressources nécéssaires";
+                        std::cout << "Vous ne possèdez pas les ressources nécéssaires" << std::endl;
                     }
                 }
                 else
@@ -1276,11 +1284,11 @@ int main()
                     if (acier >= 2 && bois >= 5 && sable >= 2 && pierre >= 1 && nourriture >= 3)
                     {
                         enoughRessources = true;
-                        std::cout << "Vous possèdez les ressources nécéssaires";
+                        std::cout << "Vous possèdez les ressources nécéssaires" << std::endl;
                     }
                     else
                     {
-                        std::cout << "Vous ne possèdez pas les ressources nécéssaires";
+                        std::cout << "Vous ne possèdez pas les ressources nécéssaires" << std::endl;
                     }
                 }
 
@@ -1392,6 +1400,8 @@ int main()
                 std::cout << "Vous avez décidé de mettre fin à votre tour : " << players_list[player_turn]->getName() << "\n\n"
                           << "=======================================\n";
                 break;
+            }else if (response == "/board"){
+                _board->printBoard();
             }
             else
             {

@@ -246,15 +246,16 @@ void Board::printBoard()
     std::cout << "   ";
     for (int column = 0; column < 7; column++)
     {
-        std::cout << " [        " << column << "        ] ";
+        std::cout << " [          " << column << "          ] ";
     }
     std::cout << "\n";
+    // 25 caractères
 
     // on print une ligne horizontale supérieure
     std::cout << "   ";
     for (int column = 0; column < 7; column++)
     {
-        std::cout << "---------------------";
+        std::cout << "-------------------------";
     }
     std::cout << "\n";
 
@@ -280,22 +281,50 @@ void Board::printBoard()
                 Player *owner = city->getOwner();
                 if (city->getCitySize() == small_town)
                 {
-                    structureInfo = " 🏘️";
+                    structureInfo = " 🏘️ ";
                 }
                 else
                 {
-                    structureInfo = " 🌇";
+                    structureInfo = " 🌇 ";
                 }
-                structureInfo += "( " + owner->getName() + " )";
+                std::string name = owner->getName();
+                std::string newName = "";
+                if (name.size() > 7){
+                    for (int i = 0; i < 7; i++)
+                    {
+                        newName += " " + name[i];
+                    }
+                } else{
+                    newName += name;
+                    for (int i = 0; i < 7-name.size(); i++)
+                    {
+                        newName += " ";
+                    }
+                }
+                structureInfo += newName;
+                // On affiche les informations de la cellule
+                if (diceNumber > 9){
+                    std::cout << " [" << ressourceToString(ressource) << structureInfo << " - Dé: " << diceNumber << "] ";
+                    std::cout << " | ";
+                }else{
+                    std::cout << " [" << ressourceToString(ressource) << structureInfo << " - Dé: " << diceNumber << " ] ";
+                    std::cout << " | ";
+                }
             }
             else
             {
-                structureInfo = " ";
+                structureInfo = "      ";
+                // On affiche les informations de la cellule
+                if (diceNumber > 9){
+                    std::cout << " [" << ressourceToString(ressource) << structureInfo << " - Dé: " << diceNumber << "] ";
+                    std::cout << " | ";
+                }else{
+                    std::cout << " [" << ressourceToString(ressource) << structureInfo << " - Dé: " << diceNumber << " ] ";
+                    std::cout << " | ";
+                }
             }
 
-            // On affiche les informations de la cellule
-            std::cout << " [" << ressourceToString(ressource) << ", Dé: " << diceNumber << structureInfo << "] ";
-            std::cout << " |";
+            
         }
         std::cout << "\n";
 
@@ -303,7 +332,7 @@ void Board::printBoard()
         std::cout << "   ";
         for (int column = 0; column < 7; column++)
         {
-            std::cout << "---------------------";
+            std::cout << "-------------------------";
         }
         std::cout << "\n";
     }
@@ -314,23 +343,23 @@ std::string Board::ressourceToString(Ressource ressource)
     switch (ressource)
     {
     case Acier:
-        return "Acier 🗼";
+        return " 🗼";
     case Bois:
-        return "Bois 🪵";
+        return " 🪵 ";
     case Sable:
-        return "Sable 🏜️";
+        return " 🏜️ ";
     case Ble:
-        return "Blé 🌾";
+        return " 🌾";
     case Nourriture:
-        return "Nourriture 🍛";
+        return " 🍛";
     case Pierre:
-        return "Pierre 🪨";
+        return " 🪨 ";
     case Argent:
-        return "Argent 🥄";
+        return " 🥄";
     case Or:
-        return "Or 🪙";
+        return " 🪙 ";
     default:
-        return "Détruit";
+        return " 🚫 ";
     }
 }
 

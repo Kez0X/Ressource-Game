@@ -32,3 +32,7 @@ void City::setTownToCity()
 {
     _size = big_city;
 };
+
+void City::describe() const {
+    std::cout << "Voici la classe City qui permet de connaître le nom du propriétaire de la ville ainsi que la taille de celle-ci" << std::endl;
+}

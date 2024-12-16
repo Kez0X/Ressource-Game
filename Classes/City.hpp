@@ -24,6 +24,11 @@ class City {
 
         // Setters
         void setTownToCity();
+
+        //Méthodes virtuelles
+        //Non utilisée
+        virtual void describe() const;
+
 };
 
 #endif

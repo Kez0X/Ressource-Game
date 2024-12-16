@@ -9,22 +9,24 @@
 
 class Board
 {
-private:
-    // Le tableau de cases
-    std::map<std::string, Cell*> _board;
 
-    // Les données des cases
+protected:
+// Les données des cases et des dès
+// Les dictionnaires suivants ne sont utilisés uniquement dans le cadre de méthodes présentes dans la classe
     std::map<std::string, std::map<Ressource, int>> _map_cases;
     std::map<std::string, std::vector<int>> _map_dice;
 
-    // La fonction de tirage d'une ressource
+private:
+    // Le tableau de cases
+    std::map<std::string, Cell*> _board;
+    // La fonction de tirage d'une ressource présente dans la classe mais peut être utilisés au sein d'autres classes
     void drawRessource(Ressource*, std::string*);
 
 public:
     // Constructeur
     Board();
 
-    // Méthodes
+    // Méthodes utilisées au sein des autres classes et qui permettent de récupérer des données et d'en afficher
     Cell* getCellByIndex(std::string);
     std::vector<Cell*> getCellsbyDiceNumber(int);
     std::vector<Cell *> getTowns();
